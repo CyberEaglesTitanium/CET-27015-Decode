@@ -39,6 +39,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
             backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
             backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -50,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             int whuhPos4 = backRight.getCurrentPosition();
 
             // Put initialization blocks here.
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
+            // frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 
 
@@ -73,6 +74,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.addData("FrontRightMotor Position", whuhPos2);
                 telemetry.addData("BackLeftMotor Position", whuhPos3);
                 telemetry.addData("BackRightMotor Position", whuhPos4);
+
                 // Gamepad movement code
                 double drive = -gamepad1.left_stick_y;
                 double strafe = gamepad1.left_stick_x;
@@ -81,6 +83,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 rightFrontPower = Range.clip(drive - turn - strafe, -1, 1);
                 leftBackPower = Range.clip(drive + turn - strafe, -1, 1);
                 rightBackPower = Range.clip(drive - turn + strafe, -1, 1);
+                telemetry.addData("FrontLeftMotor Speed", leftFrontPower);
+                telemetry.addData("FrontRightMotor Speed", rightFrontPower);
+                telemetry.addData("BackLeftMotor Speed", leftBackPower);
+                telemetry.addData("BackRightMotor Speed", rightBackPower);
                 if (gamepad1.left_bumper) {
                     leftFrontPower /= 2;
                     leftBackPower /= 2;
