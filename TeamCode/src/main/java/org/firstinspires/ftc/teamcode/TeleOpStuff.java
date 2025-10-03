@@ -89,17 +89,17 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
                 telemetry.update();
                 if (gamepad1.left_bumper) {
-                    leftFrontPower /= 2;
-                    leftBackPower /= 2;
-                    rightFrontPower /= 2;
-                    rightBackPower /= 2 ;
+                    leftFrontPower /= 4;
+                    leftBackPower /= 4;
+                    rightFrontPower /= 4;
+                    rightBackPower /= 4;
                 }
 
                 if (gamepad1.right_bumper) {
-                    leftFrontPower *= 1.8;
-                    leftBackPower *= 1.8;
-                    rightFrontPower *= 1.8;
-                    rightBackPower *= 1.8;
+                    leftFrontPower *= 3.8;
+                    leftBackPower *= 3.8;
+                    rightFrontPower *= 3.8;
+                    rightBackPower *= 3.8;
                 }
 
                 frontLeft.setPower(leftFrontPower /= 1.8);
