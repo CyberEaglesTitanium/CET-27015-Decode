@@ -87,6 +87,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.addData("FrontRightMotor Speed", rightFrontPower);
                 telemetry.addData("BackLeftMotor Speed", leftBackPower);
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
+                telemetry.update();
                 if (gamepad1.left_bumper) {
                     leftFrontPower /= 2;
                     leftBackPower /= 2;
