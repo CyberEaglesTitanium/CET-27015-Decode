@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             int whuhPos4 = backRight.getCurrentPosition();
 
             // Put initialization blocks here.
-            // frontLeft.setDirection(DcMotor.Direction.REVERSE);
+            frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 
 
@@ -65,15 +65,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 double rightFrontPower;
                 double leftBackPower;
                 double rightBackPower;
-                whuhPos1 = frontLeft.getCurrentPosition();
-                whuhPos2 = frontRight.getCurrentPosition();
-                whuhPos3 = backLeft.getCurrentPosition();
-                whuhPos4 = backRight.getCurrentPosition();
+//                whuhPos1 = frontLeft.getCurrentPosition();
+//                whuhPos2 = frontRight.getCurrentPosition();
+//                whuhPos3 = backLeft.getCurrentPosition();
+//                whuhPos4 = backRight.getCurrentPosition();
 
-                telemetry.addData("FrontLeftMotor Position", whuhPos1);
-                telemetry.addData("FrontRightMotor Position", whuhPos2);
-                telemetry.addData("BackLeftMotor Position", whuhPos3);
-                telemetry.addData("BackRightMotor Position", whuhPos4);
+            //    telemetry.addData("FrontLeftMotor Position", whuhPos1);
+            //    telemetry.addData("FrontRightMotor Position", whuhPos2);
+            //    telemetry.addData("BackLeftMotor Position", whuhPos3);
+            //    telemetry.addData("BackRightMotor Position", whuhPos4);
 
                 // Gamepad movement code
                 double drive = -gamepad1.left_stick_y;
@@ -83,11 +83,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 rightFrontPower = Range.clip(drive - turn - strafe, -1, 1);
                 leftBackPower = Range.clip(drive + turn - strafe, -1, 1);
                 rightBackPower = Range.clip(drive - turn + strafe, -1, 1);
-                telemetry.addData("FrontLeftMotor Speed", leftFrontPower);
-                telemetry.addData("FrontRightMotor Speed", rightFrontPower);
-                telemetry.addData("BackLeftMotor Speed", leftBackPower);
-                telemetry.addData("BackRightMotor Speed", rightBackPower);
-                telemetry.update();
+
                 if (gamepad1.left_bumper) {
                     leftFrontPower /= 2;
                     leftBackPower /= 2;
@@ -106,6 +102,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 frontRight.setPower(rightFrontPower /= 1.8);
                 backLeft.setPower(leftBackPower /= 1.8);
                 backRight.setPower(rightBackPower /= 1.8);
+
+                telemetry.addData("FrontLeftMotor Speed", leftFrontPower);
+                telemetry.addData("FrontRightMotor Speed", rightFrontPower);
+                telemetry.addData("BackLeftMotor Speed", leftBackPower);
+                telemetry.addData("BackRightMotor Speed", rightBackPower);
+                telemetry.update();
             }
         }
     }
