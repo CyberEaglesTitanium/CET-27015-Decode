@@ -30,6 +30,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
         private DcMotorEx backLeft;
         private DcMotorEx backRight;
 
+        private DcMotorEx intakeMotor;
+
         // Init gamepad, motors + servo
 
         @Override
@@ -39,16 +41,22 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
             backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
             backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+            intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             // Variables
             double ticks = 	537.7;
             int whuhPos1 = frontLeft.getCurrentPosition();
             int whuhPos2 = frontRight.getCurrentPosition();
             int whuhPos3 = backLeft.getCurrentPosition();
             int whuhPos4 = backRight.getCurrentPosition();
+            int intakePos = intakeMotor.getCurrentPosition();
 
             // Put initialization blocks here.
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -108,6 +116,30 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.addData("BackLeftMotor Speed", leftBackPower);
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
                 telemetry.update();
+
+                if (gamepad2.right_trigger >= 0.5) {
+                        intakeMotor.setPower(0.1);
+                } else {
+                    intakeMotor.setPower(0);
+                }
+                if (gamepad2.dpad_up) {
+                    intakeMotor.setPower(0.75);
+                } else {
+                    intakeMotor.setPower(0);
+                }
+
+
+                if (gamepad2.left_trigger >= 0.5) {
+                        intakeMotor.setPower(-1);
+                } else {
+                    intakeMotor.setPower(0);
+                }
+                if (gamepad2.dpad_down) {
+                    intakeMotor.setPower(-0.75);
+                } else {
+                    intakeMotor.setPower(0);
+                }
+
             }
         }
     }

@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.OpticalDistanceSensor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp
+@TeleOp(name = "Color Sorter Test OpMode")
 public class ColorSensorSorterThing extends LinearOpMode {
     private NormalizedColorSensor colsense;
     private Servo sweepingSweeper;
@@ -31,7 +31,7 @@ public class ColorSensorSorterThing extends LinearOpMode {
             sweepingSweeper.setPosition(0);
         }
         while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
-            telemetry.addLine("No Colors found...");
+            telemetry.addLine("No Colors found :c");
         }
     }
 }

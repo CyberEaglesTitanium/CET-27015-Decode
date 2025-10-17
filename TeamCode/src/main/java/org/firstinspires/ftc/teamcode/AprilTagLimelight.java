@@ -51,14 +51,13 @@ public class AprilTagLimelight extends OpMode {
         if (llResult != null & llResult.isValid()) {
             Pose3D botPose = llResult.getBotpose_MT2();
             // Init telemetry (Target X, Target Y, Target area)
-            telemetry.addData("Current AprilTag ID", "21");
+            telemetry.addData("Current AprilTag ID", limelight.getLatestResult());
             telemetry.addData("Tx",llResult.getTx());
             telemetry.addData("Ty", llResult.getTy());
             telemetry.addData("Ta", llResult.getTa());
             telemetry.update();
         } else {
             // Init telemetry (no AprilTag found)
-            telemetry.addData("Current AprilTag ID", "21");
             telemetry.addData("Limelight", "No Matching Targets!");
             telemetry.update();
         }
