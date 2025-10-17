@@ -140,7 +140,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.update();
 
                 if (gamepad2.right_trigger >= 0.5) {
-                        intakeMotor.setPower(0.1);
+                        intakeMotor.setPower(1);
                 } else {
                     intakeMotor.setPower(0);
                 }
