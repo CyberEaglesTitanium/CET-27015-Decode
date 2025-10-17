@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomousOpModes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous (name = "This Tests Motors")
-public class ThisTestsTheFlippinMotors extends LinearOpMode {
+@Autonomous (name = "Extremely Basic Autonomous")
+public class LineMove extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -33,6 +33,6 @@ public class ThisTestsTheFlippinMotors extends LinearOpMode {
 
         waitForStart();
 
-
+        testThing();
     }
 }

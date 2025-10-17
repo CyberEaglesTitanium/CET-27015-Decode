@@ -7,6 +7,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.hardware.Servo;
 //import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -32,6 +35,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
         private DcMotorEx intakeMotor;
 
+        private NormalizedColorSensor colsense;
+        private Servo sweepingSweeper;
+
         // Init gamepad, motors + servo
 
         @Override
@@ -41,11 +47,16 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
             backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
             backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+
             intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            colsense = hardwareMap.get(NormalizedColorSensor.class, "colsense");
+            sweepingSweeper = hardwareMap.get(Servo.class, "sweepingSweeper");
 
             intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -62,8 +73,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 
+            NormalizedRGBA colors = colsense.getNormalizedColors();
 
-
+            while (colors.blue >= 100 && colors.red <= 162) {
+                telemetry.addLine("Color is PURPLE!");
+                sweepingSweeper.setPosition(1);
+            }
+            while (colors.green == 255) {
+                telemetry.addLine("Color is GREEN!");
+                sweepingSweeper.setPosition(0);
+            }
+            while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
+                telemetry.addLine("No Colors found :c");
+            }
 
             // Main loop for the motors
             waitForStart();
