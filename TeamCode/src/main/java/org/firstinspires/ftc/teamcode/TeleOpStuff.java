@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -55,8 +56,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            colsense = hardwareMap.get(NormalizedColorSensor.class, "colsense");
-            sweepingSweeper = hardwareMap.get(Servo.class, "sweepingSweeper");
+//            colsense = hardwareMap.get(NormalizedColorSensor.class, "colsense");
+//            sweepingSweeper = hardwareMap.get(Servo.class, "sweepingSweeper");
 
             intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -73,19 +74,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 
-            NormalizedRGBA colors = colsense.getNormalizedColors();
-
-            while (colors.blue >= 100 && colors.red <= 162) {
-                telemetry.addLine("Color is PURPLE!");
-                sweepingSweeper.setPosition(1);
-            }
-            while (colors.green == 255) {
-                telemetry.addLine("Color is GREEN!");
-                sweepingSweeper.setPosition(0);
-            }
-            while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
-                telemetry.addLine("No Colors found :c");
-            }
+//            NormalizedRGBA colors = colsense.getNormalizedColors();
+//
+//            while (colors.blue >= 100 && colors.red <= 162) {
+//                telemetry.addLine("Color is PURPLE!");
+//                sweepingSweeper.setPosition(1);
+//            }
+//            while (colors.green == 255) {
+//                telemetry.addLine("Color is GREEN!");
+//                sweepingSweeper.setPosition(0);
+//            }
+//            while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
+//                telemetry.addLine("No Colors found :c");
+//            }
 
             // Main loop for the motors
             waitForStart();
@@ -145,7 +146,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     intakeMotor.setPower(0);
                 }
                 if (gamepad2.dpad_up) {
-                    intakeMotor.setPower(0.75);
+                    intakeMotor.setPower(1);
                 } else {
                     intakeMotor.setPower(0);
                 }
@@ -157,7 +158,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     intakeMotor.setPower(0);
                 }
                 if (gamepad2.dpad_down) {
-                    intakeMotor.setPower(-0.75);
+                    intakeMotor.setPower(-1);
                 } else {
                     intakeMotor.setPower(0);
                 }
