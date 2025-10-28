@@ -12,6 +12,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
+import java.util.List;
+
 
 /*
 --------------------------------------------
@@ -51,11 +53,24 @@ public class AprilTagLimelight extends OpMode {
         if (llResult != null & llResult.isValid()) {
             Pose3D botPose = llResult.getBotpose_MT2();
             // Init telemetry (Target X, Target Y, Target area)
-            telemetry.addData("Current AprilTag ID", limelight.getLatestResult());
             telemetry.addData("Tx",llResult.getTx());
             telemetry.addData("Ty", llResult.getTy());
             telemetry.addData("Ta", llResult.getTa());
+            telemetry.addData("Bot pose", botPose.toString());
+            telemetry.addData("Yaw", botPose.getOrientation().getYaw());
+            if (botPose != null) {
+                double x = botPose.getPosition().x;
+                double y = botPose.getPosition().y;
+                telemetry.addData("MT2 Location:", "(" + x + ", " + y + ")");
+            }
+
+            List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
+            for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            }
             telemetry.update();
+
+
         } else {
             // Init telemetry (no AprilTag found)
             telemetry.addData("Limelight", "No Matching Targets!");

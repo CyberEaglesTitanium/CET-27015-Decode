@@ -74,19 +74,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 
-//            NormalizedRGBA colors = colsense.getNormalizedColors();
-//
-//            while (colors.blue >= 100 && colors.red <= 162) {
-//                telemetry.addLine("Color is PURPLE!");
-//                sweepingSweeper.setPosition(1);
-//            }
-//            while (colors.green == 255) {
-//                telemetry.addLine("Color is GREEN!");
-//                sweepingSweeper.setPosition(0);
-//            }
-//            while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
-//                telemetry.addLine("No Colors found :c");
-//            }
+            NormalizedRGBA colors = colsense.getNormalizedColors();
+
+            while (colors.blue >= 100 && colors.red <= 162) {
+                telemetry.addLine("Color is PURPLE!");
+                sweepingSweeper.setPosition(1);
+            }
+            while (colors.green == 255) {
+                telemetry.addLine("Color is GREEN!");
+                sweepingSweeper.setPosition(0);
+            }
+            while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
+                telemetry.addLine("No Colors found :c");
+            }
 
             // Main loop for the motors
             waitForStart();

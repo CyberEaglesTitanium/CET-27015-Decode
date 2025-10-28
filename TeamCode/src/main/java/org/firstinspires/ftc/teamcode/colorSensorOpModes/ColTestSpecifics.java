@@ -3,27 +3,24 @@ package org.firstinspires.ftc.teamcode.colorSensorOpModes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 @TeleOp
 public class ColTestSpecifics extends LinearOpMode {
-    private NormalizedColorSensor colsense;
+    private ColorSensor colsense;
 
     @Override
     public void runOpMode() {
-        colsense = hardwareMap.get(NormalizedColorSensor.class, "colsense");
+        colsense = hardwareMap.get(ColorSensor.class, "colsense");
         waitForStart();
-        NormalizedRGBA colors = colsense.getNormalizedColors();
 
         while (opModeIsActive()) {
-            while (colors.blue >= 0.071 && colors.red >= 0.065 && colors.green >= 0.106) {
+            while (colsense.blue() <= 113 && colsense.red() <= 90 && colsense.green() >= 76) {
                 telemetry.clear();
                 telemetry.addLine("PURPLE FOUND");
                 telemetry.update();
             }
-            while (colors.green <= 0.160 && colors.red <= 0.025 && colors.blue <= 0.060) {
+            while (colsense.green() <= 394 && colsense.red() <= 128 && colsense.blue() <= 243) {
                 telemetry.clear();
                 telemetry.addLine("GREEN FOUND");
                 telemetry.update();
