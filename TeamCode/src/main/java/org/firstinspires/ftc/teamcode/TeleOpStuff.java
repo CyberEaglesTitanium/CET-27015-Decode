@@ -36,9 +36,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
         private DcMotorEx intakeMotor;
 
-        private NormalizedColorSensor colsense;
-        private Servo sweepingSweeper;
-
         // Init gamepad, motors + servo
 
         @Override
@@ -56,9 +53,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//            colsense = hardwareMap.get(NormalizedColorSensor.class, "colsense");
-//            sweepingSweeper = hardwareMap.get(Servo.class, "sweepingSweeper");
-
             intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -73,20 +67,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             // Put initialization blocks here.
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
-
-            NormalizedRGBA colors = colsense.getNormalizedColors();
-
-            while (colors.blue >= 100 && colors.red <= 162) {
-                telemetry.addLine("Color is PURPLE!");
-                sweepingSweeper.setPosition(1);
-            }
-            while (colors.green == 255) {
-                telemetry.addLine("Color is GREEN!");
-                sweepingSweeper.setPosition(0);
-            }
-            while (colors.blue == 0 && colors.red == 0 && colors.green == 0) {
-                telemetry.addLine("No Colors found :c");
-            }
 
             // Main loop for the motors
             waitForStart();
