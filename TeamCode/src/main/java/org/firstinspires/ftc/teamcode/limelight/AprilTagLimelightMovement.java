@@ -14,15 +14,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
-
-/*
---------------------------------------------
-The below code (until next comment) is
-the OpMode for checking for AprilTag ID 21.
-
-May not work correctly, depends on pipeline.
---------------------------------------------
- */
 @Autonomous(name = "AprilTag Alignment Movement OpMode Thing")
 public class AprilTagLimelightMovement extends OpMode {
     private Limelight3A limelight;
@@ -31,9 +22,13 @@ public class AprilTagLimelightMovement extends OpMode {
 
     @Override
     public void init() {
-        // Init Limelight and IMU, also change pipeline to the correct filter one
+        // Initialize Limelight
         limelight = hardwareMap.get(Limelight3A.class, "limelight");
+
+        // Switch the pipeline to 0
         limelight.pipelineSwitch(0);
+
+        // Initialize IMU with hub orientation settings
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         imu.initialize(new IMU.Parameters((revHubOrientationOnRobot)));
@@ -50,6 +45,8 @@ public class AprilTagLimelightMovement extends OpMode {
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
         limelight.updateRobotOrientation(orientation.getYaw());
         LLResult llResult = limelight.getLatestResult();
+
+        // Limelight loop, detects AprilTags and robot position
         if (llResult != null & llResult.isValid()) {
             Pose3D botPose = llResult.getBotpose_MT2();
             if (botPose != null) {

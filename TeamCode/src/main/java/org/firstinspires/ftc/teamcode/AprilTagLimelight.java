@@ -48,23 +48,40 @@ public class AprilTagLimelight extends OpMode {
     public void loop() {
         // Variables for YPR (yaw, pitch, roll), Limelight orientation, and Limelight results
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
+
+        // Get orientation from YPR and Limelight
         limelight.updateRobotOrientation(orientation.getYaw());
+
+        // Gets data from Limelight for usage later
         LLResult llResult = limelight.getLatestResult();
+
+        // Limelight loop, 
         if (llResult != null & llResult.isValid()) {
+
+            // Registers botpose using MegaTag2
             Pose3D botPose = llResult.getBotpose_MT2();
+
             // Init telemetry (Target X, Target Y, Target area)
             telemetry.addData("Tx",llResult.getTx());
             telemetry.addData("Ty", llResult.getTy());
             telemetry.addData("Ta", llResult.getTa());
             telemetry.addData("Bot pose", botPose.toString());
             telemetry.addData("Yaw", botPose.getOrientation().getYaw());
+
+            // Checks location of robot using MegaTag2 (checks botpose)
             if (botPose != null) {
+                // Robot position fetching
                 double x = botPose.getPosition().x;
                 double y = botPose.getPosition().y;
+
+                // Register location with MT2 to telemetry
                 telemetry.addData("MT2 Location:", "(" + x + ", " + y + ")");
             }
 
+            // Grabs AprilTag results and puts them in a list
             List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
+
+            // Logs AprilTag IDs, family, and position to telemetry
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
             }
@@ -72,7 +89,7 @@ public class AprilTagLimelight extends OpMode {
 
 
         } else {
-            // Init telemetry (no AprilTag found)
+            // Logs that no AprilTags matching the current filter were found to telemetry
             telemetry.addData("Limelight", "No Matching Targets!");
             telemetry.update();
         }

@@ -76,15 +76,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 double rightFrontPower;
                 double leftBackPower;
                 double rightBackPower;
-//                whuhPos1 = frontLeft.getCurrentPosition();
-//                whuhPos2 = frontRight.getCurrentPosition();
-//                whuhPos3 = backLeft.getCurrentPosition();
-//                whuhPos4 = backRight.getCurrentPosition();
-
-            //    telemetry.addData("FrontLeftMotor Position", whuhPos1);
-            //    telemetry.addData("FrontRightMotor Position", whuhPos2);
-            //    telemetry.addData("BackLeftMotor Position", whuhPos3);
-            //    telemetry.addData("BackRightMotor Position", whuhPos4);
 
                 // Gamepad movement code
                 double drive = -gamepad1.left_stick_y;
@@ -95,6 +86,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 leftBackPower = Range.clip(drive + turn - strafe, -1, 1);
                 rightBackPower = Range.clip(drive - turn + strafe, -1, 1);
 
+                // Speed control buttons
                 if (gamepad1.left_bumper) {
                     leftFrontPower /= 2;
                     leftBackPower /= 2;
@@ -109,6 +101,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     rightBackPower *= 1.8;
                 }
 
+                // Sets the power when gamepad
                 frontLeft.setPower(leftFrontPower /= 1.8);
                 frontRight.setPower(rightFrontPower /= 1.8);
                 backLeft.setPower(leftBackPower /= 1.8);
@@ -120,6 +113,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
                 telemetry.update();
 
+                // Intake controls (in)
                 if (gamepad2.right_trigger >= 0.5) {
                         intakeMotor.setPower(1);
                 } else {
@@ -131,7 +125,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     intakeMotor.setPower(0);
                 }
 
-
+                // Intake controls (out)
                 if (gamepad2.left_trigger >= 0.5) {
                         intakeMotor.setPower(-1);
                 } else {
