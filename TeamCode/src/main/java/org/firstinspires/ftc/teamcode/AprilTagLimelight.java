@@ -55,7 +55,7 @@ public class AprilTagLimelight extends OpMode {
         // Gets data from Limelight for usage later
         LLResult llResult = limelight.getLatestResult();
 
-        // Limelight loop, 
+        // Limelight loop, detects AprilTags, robot position, and other general Limelight info
         if (llResult != null & llResult.isValid()) {
 
             // Registers botpose using MegaTag2
