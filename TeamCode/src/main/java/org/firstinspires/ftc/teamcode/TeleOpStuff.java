@@ -35,6 +35,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
         private DcMotorEx backRight;
 
         private DcMotorEx intakeMotor;
+        private DcMotorEx shootMotor;
 
         // Init gamepad, motors + servo
 
@@ -47,6 +48,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             backRight = hardwareMap.get(DcMotorEx.class, "backRight");
 
             intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+            shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
 
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -58,6 +60,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             // Variables
             double ticks = 	537.7;
+
+            double shooterSpeed = 0;
+
             int whuhPos1 = frontLeft.getCurrentPosition();
             int whuhPos2 = frontRight.getCurrentPosition();
             int whuhPos3 = backLeft.getCurrentPosition();
@@ -135,6 +140,34 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     intakeMotor.setPower(-1);
                 } else {
                     intakeMotor.setPower(0);
+                }
+
+                // Shooter controls (Controller 2)
+//                if (gamepad2.right_bumper) {
+//
+//                } else if (gamepad2.left_bumper) {
+//
+//
+//                }
+
+                if (gamepad2.rightBumperWasReleased()) {
+                    if (shooterSpeed > 1) {
+                        shooterSpeed = 1;
+                    } else {
+                        shooterSpeed += 0.1;
+                    }
+                } else if (gamepad2.leftBumperWasReleased()) {
+                    if (shooterSpeed < 0) {
+                        shooterSpeed = 0;
+                    } else {
+                        shooterSpeed -= 0.1;
+                    }
+                }
+
+                if (gamepad2.dpad_up) {
+                    shootMotor.setPower(shooterSpeed);
+                } else {
+                    shootMotor.setPower(0);
                 }
 
             }
