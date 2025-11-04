@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.CRServo;
 //import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 //import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -37,6 +38,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
         private DcMotorEx intakeMotor;
         private DcMotorEx shootMotor;
 
+        private CRServo shootGate1;
+        private CRServo shootGate2;
         // Init gamepad, motors + servo
 
         @Override
@@ -49,6 +52,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
             intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
             shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
+
+            shootGate1 = hardwareMap.get(CRServo.class, "shootGate1");
+            shootGate2 = hardwareMap.get(CRServo.class, "shootGate2");
 
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -162,6 +168,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     } else {
                         shooterSpeed -= 0.1;
                     }
+                }
+
+                if (gamepad2.a) {
+                    shootGate1.setPower(0.7);
+                    shootGate2.setPower(0.7);
+                }
+                if (gamepad2.b) {
+                    shootGate1.setPower(-0.7);
+                    shootGate1.setPower(-0.7);
                 }
 
                 if (gamepad2.dpad_up) {
