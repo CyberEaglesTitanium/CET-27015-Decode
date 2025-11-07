@@ -116,6 +116,7 @@ public class AprilTagLimelightMovement extends OpMode {
      */
     public void botTelemetry () {
         // Get robot location using MegaTag 2 and bot positions
+        getBotPos();
         telemetry.addData("MT2 Location:", "(" + botX + ", " + botY + ")");
 
         // Get AprilTag IDs, positions, and family
@@ -123,5 +124,9 @@ public class AprilTagLimelightMovement extends OpMode {
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
         }
+    }
+
+    public void moveOnAprilTag() {
+        // unused for now...
     }
 }
