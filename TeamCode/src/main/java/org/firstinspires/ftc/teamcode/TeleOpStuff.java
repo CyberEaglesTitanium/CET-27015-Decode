@@ -126,35 +126,29 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
                 // Intake controls (in)
                 if (gamepad2.right_trigger >= 0.5) {
-                        intakeMotor.setPower(1);
+                        intakeMotor.setPower(0.75);
                 } else {
                     intakeMotor.setPower(0);
                 }
                 if (gamepad2.dpad_up) {
-                    intakeMotor.setPower(1);
+                    intakeMotor.setPower(0.75);
                 } else {
                     intakeMotor.setPower(0);
                 }
 
                 // Intake controls (out)
                 if (gamepad2.left_trigger >= 0.5) {
-                        intakeMotor.setPower(-1);
+                        intakeMotor.setPower(-0.75);
                 } else {
                     intakeMotor.setPower(0);
                 }
                 if (gamepad2.dpad_down) {
-                    intakeMotor.setPower(-1);
+                    intakeMotor.setPower(-0.75);
                 } else {
                     intakeMotor.setPower(0);
                 }
 
                 // Shooter controls (Controller 2)
-//                if (gamepad2.right_bumper) {
-//
-//                } else if (gamepad2.left_bumper) {
-//
-//
-//                }
 
                 if (gamepad2.rightBumperWasReleased()) {
                     if (shooterSpeed > 1) {

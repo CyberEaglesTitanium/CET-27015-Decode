@@ -21,6 +21,8 @@ public class AprilTagLimelightMovement extends OpMode {
     private LLResult llResult;
     private Pose3D botPose;
 
+    private String robotSortOrder;
+
     private double botX;
     private double botY;
 
@@ -95,13 +97,19 @@ public class AprilTagLimelightMovement extends OpMode {
         Arguments: still none
         Returns: double
         Global variables:
+            - botPose: Current robot position data in relation to an AprilTag
             - botX: Current robot X position in relation to estimated location on field
             - botY: Current robot Y position in relation to estimated location on field
      */
     public void getBotPos() {
-        // Get bot positions for later use
-        botX = botPose.getPosition().x;
-        botY = botPose.getPosition().y;
+        // get current botpose data from limelight
+        botPose = llResult.getBotpose_MT2();
+        if (botPose != null) {
+            // Save bot positions for later use
+            botX = botPose.getPosition().x;
+            botY = botPose.getPosition().y;
+        }
+
     }
 
     /*
@@ -113,20 +121,54 @@ public class AprilTagLimelightMovement extends OpMode {
             - botY: Current robot Y position in relation to estimated location on field
             - llResult: Current Limelight results (see limelightInit)
             - telemetry: Global telemetry object, adds data to update on telemetry.update()
+            - robotSortOrder: String object, contains current order of Artifacts
      */
     public void botTelemetry () {
+        // Get direct limelight target info
+        telemetry.addData("Target X", llResult.getTx());
+        telemetry.addData("Target Y", llResult.getTy());
+        telemetry.addData("Target Area", llResult.getTa());
+        telemetry.addData("Botpose", botPose.toString());
+
         // Get robot location using MegaTag 2 and bot positions
-        getBotPos();
         telemetry.addData("MT2 Location:", "(" + botX + ", " + botY + ")");
 
         // Get AprilTag IDs, positions, and family
         List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             telemetry.addData("Fiducial", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+            if (fr.getFiducialId() == 21) {
+                robotSortOrder = "greenpurplepurple";
+            } else if (fr.getFiducialId() == 22) {
+                robotSortOrder = "purplegreenpurple";
+            } else if (fr.getFiducialId() == 23) {
+                robotSortOrder = "purplepurplegreen";
+            }
+            telemetry.addData("Sort Order", robotSortOrder);
         }
     }
 
     public void moveOnAprilTag() {
+        botTelemetry();
+
+        List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
+        for (LLResultTypes.FiducialResult fr : fiducialResults) {
+            if (fr.getFiducialId() == 24) {
+                if (botX > 0) {
+
+                } else {
+
+                }
+            } else if (fr.getFiducialId() == 20) {
+                if (botX < -20) {
+
+                } else {
+
+                }
+            }
+
+            }
+
         // unused for now...
     }
 }
