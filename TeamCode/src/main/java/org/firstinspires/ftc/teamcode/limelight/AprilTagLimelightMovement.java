@@ -167,23 +167,26 @@ public class AprilTagLimelightMovement extends OpMode {
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             if (fr.getFiducialId() == 24) {
                     do {
-
+                        turnRight();
                     } while (botX > 10);
             } else if (fr.getFiducialId() == 20) {
                 do {
-
+                    turnLeft();
                 } while (botX > 10);
             }
-
-            }
-
-        // unused for now...
+        }
     }
 
     public void turnLeft(){
-
+        frontLeft.setPower(0.5);
+        frontRight.setPower(-0.5);
+        backLeft.setPower(0.5);
+        backRight.setPower(-0.5);
     }
     public void turnRight(){
-
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
     }
 }
