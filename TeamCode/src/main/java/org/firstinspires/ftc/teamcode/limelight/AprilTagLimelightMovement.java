@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
-@Autonomous(name = "AprilTag Alignment Movement OpMode Thing")
+@TeleOp(name = "AprilTag Alignment Movement OpMode Thing")
 public class AprilTagLimelightMovement extends OpMode {
     private Limelight3A limelight;
     private IMU imu;
@@ -126,7 +126,7 @@ public class AprilTagLimelightMovement extends OpMode {
 
     /*
         Purpose: Grabs telemetry of robot position and AprilTag ID, family, and position
-        Arguments: still *beep*ing none
+        Arguments: still, once again, none
         Returns: "technically" nothing
         Global variables:
             - botX: Current robot X position in relation to estimated location on field
@@ -159,7 +159,17 @@ public class AprilTagLimelightMovement extends OpMode {
             telemetry.addData("Sort Order", robotSortOrder);
         }
     }
-
+    /*
+        Purpose: Turn robot when a certain AprilTag is detected.
+        Arguments: STILL. ZERO. ARGUMENTS. WHY IS THIS HERE.
+        Returns: Robot telemetry (see botTelemetry(), up above), movement in real life (see turnLeft() and turnRight(), down below)
+        Global variables:
+            - llResult: Current Limelight data, see limelightInit() for more info
+            - botTelemetry(): See above function comment for more info
+            - turnLeft() & turnRight(): Turns robot, see related comment for more info
+            - botX: Current robot X position in relation to estimated location on field
+            - botY: Current robot Y position in relation to estimated location on field
+     */
     public void moveOnAprilTag() {
         botTelemetry();
 
@@ -176,6 +186,19 @@ public class AprilTagLimelightMovement extends OpMode {
             }
         }
     }
+
+    /*
+        turnLeft() and turnRight()
+
+        Purpose: Turn left and right. Very simple.
+        Arguments: ONCE AGAIN, THERE ARE NONE. THERE NEVER WERE ANY. I MEAN IT. WHY DO I KEEP ADDING THESE???
+        Returns: Movement in real life (turns robot)
+        Global variables:
+            - frontLeft: Top left motor on robot
+            - frontRight: Top right motor on robot
+            - backLeft: Bottom left motor on robot
+            - backRight: Bottom right motor on robot
+     */
 
     public void turnLeft(){
         frontLeft.setPower(0.5);

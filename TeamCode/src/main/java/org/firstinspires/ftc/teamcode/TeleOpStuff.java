@@ -122,6 +122,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 telemetry.addData("FrontRightMotor Speed", rightFrontPower);
                 telemetry.addData("BackLeftMotor Speed", leftBackPower);
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
+                telemetry.addData("Shooter Motor Power", shootMotor.getPower());
+                telemetry.addData("Intake Motor Power", intakeMotor.getPower());
                 telemetry.update();
 
                 // Intake controls (in)
@@ -148,9 +150,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                     intakeMotor.setPower(0);
                 }
 
-                // Shooter controls (Controller 2)
+                // Shooter controls (Controllers 1+2)
+                if (gamepad1.square) {
+                    shootMotor.setPower(1);
+                } else {
+                    shootMotor.setPower(0);
+                }
 
-                if (gamepad2.x) {
+                if (gamepad2.square) {
                     shootMotor.setPower(1);
                 } else {
                     shootMotor.setPower(0);
