@@ -129,8 +129,8 @@ public class AprilTagLimelightMovement extends OpMode {
         Arguments: still, once again, none
         Returns: "technically" nothing
         Global variables:
-            - botX: Current robot X position in relation to estimated location on field
-            - botY: Current robot Y position in relation to estimated location on field
+            - botX: Current robot X position in relation to estimated location on field relative to the AprilTag
+            - botY: Current robot Y position in relation to estimated location on field relative to the AprilTag
             - llResult: Current Limelight results (see limelightInit)
             - telemetry: Global telemetry object, adds data to update on telemetry.update()
             - robotSortOrder: String object, contains current order of Artifacts
@@ -167,8 +167,6 @@ public class AprilTagLimelightMovement extends OpMode {
             - llResult: Current Limelight data, see limelightInit() for more info
             - botTelemetry(): See above function comment for more info
             - turnLeft() & turnRight(): Turns robot, see related comment for more info
-            - botX: Current robot X position in relation to estimated location on field
-            - botY: Current robot Y position in relation to estimated location on field
      */
     public void moveOnAprilTag() {
         botTelemetry();
@@ -176,15 +174,18 @@ public class AprilTagLimelightMovement extends OpMode {
         List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             if (fr.getFiducialId() == 24) {
+                telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
                     do {
                         turnRight();
-                    } while (botX > 10);
+                    } while (fr.getTargetXDegrees() > 10);
             } else if (fr.getFiducialId() == 20) {
+                telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
                 do {
                     turnLeft();
-                } while (botX > 10);
+                } while (fr.getTargetXDegrees() > 10);
             }
         }
+        telemetry.update();
     }
 
     /*
