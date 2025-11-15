@@ -7,6 +7,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
@@ -20,6 +21,11 @@ public class AprilTagLimelightMovement extends OpMode {
     private IMU imu;
     private LLResult llResult;
     private Pose3D botPose;
+
+    private DcMotorEx frontLeft;
+    private DcMotorEx frontRight;
+    private DcMotorEx backLeft;
+    private DcMotorEx backRight;
 
     private String robotSortOrder;
 
@@ -38,6 +44,12 @@ public class AprilTagLimelightMovement extends OpMode {
         imu = hardwareMap.get(IMU.class, "imu");
         RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
         imu.initialize(new IMU.Parameters((revHubOrientationOnRobot)));
+
+        // Init motors
+        frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
+        frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
+        backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        backRight = hardwareMap.get(DcMotorEx.class, "backRight");
     }
 
     @Override
@@ -154,21 +166,24 @@ public class AprilTagLimelightMovement extends OpMode {
         List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
             if (fr.getFiducialId() == 24) {
-                if (botX > 0) {
+                    do {
 
-                } else {
-
-                }
+                    } while (botX > 10);
             } else if (fr.getFiducialId() == 20) {
-                if (botX < -20) {
+                do {
 
-                } else {
-
-                }
+                } while (botX > 10);
             }
 
             }
 
         // unused for now...
+    }
+
+    public void turnLeft(){
+
+    }
+    public void turnRight(){
+
     }
 }
