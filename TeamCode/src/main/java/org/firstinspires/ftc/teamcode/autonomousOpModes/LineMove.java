@@ -44,6 +44,14 @@ public class LineMove extends LinearOpMode {
         shootMotor.setPower(0);
     }
 
+    void turnDangIt() {
+        frontLeft.setPower(0.5);
+        frontRight.setPower(-0.5);
+        backLeft.setPower(0.5);
+        backRight.setPower(-0.5);
+        sleep(500);
+    }
+
     void testThing() {
         frontLeft.setPower(0.5);
         frontRight.setPower(0.5);
@@ -55,6 +63,7 @@ public class LineMove extends LinearOpMode {
         backLeft.setPower(0);
         backRight.setPower(0);
         sleep(250);
+        turnDangIt();
         launchCodes();
     }
 
