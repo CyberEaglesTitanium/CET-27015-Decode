@@ -69,6 +69,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
             double shooterSpeed = 0;
 
+            boolean isReversed = false;
+
             int whuhPos1 = frontLeft.getCurrentPosition();
             int whuhPos2 = frontRight.getCurrentPosition();
             int whuhPos3 = backLeft.getCurrentPosition();
@@ -89,9 +91,20 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 double rightBackPower;
 
                 // Gamepad movement code
-                double drive = -gamepad1.left_stick_y;
-                double strafe = gamepad1.left_stick_x;
-                double turn = gamepad1.right_stick_x;
+
+                double drive = 0;
+                double strafe = 0;
+                double turn = 0;
+                if (!isReversed) {
+                    drive = -gamepad1.left_stick_y;
+                    strafe = gamepad1.left_stick_x;
+                    turn = gamepad1.right_stick_x;
+                } else if (isReversed) {
+                    drive = gamepad1.left_stick_y;
+                    strafe = -gamepad1.left_stick_x;
+                    turn = -gamepad1.right_stick_x;
+                }
+
                 leftFrontPower = Range.clip(drive + turn + strafe, -1, 1);
                 rightFrontPower = Range.clip(drive - turn - strafe, -1, 1);
                 leftBackPower = Range.clip(drive + turn - strafe, -1, 1);
@@ -128,7 +141,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
                 // Intake controls (in)
                 if (gamepad2.right_trigger >= 0.5) {
-                        intakeMotor.setPower(1);
+                    intakeMotor.setPower(1);
                 } else if (gamepad2.left_trigger >= 0.5) {
                     intakeMotor.setPower(-1);
                 } else {
@@ -174,6 +187,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //                        shooterSpeed -= 0.1;
 //                    }
 //                }
+
+                if (gamepad1.aWasReleased() && !isReversed) {
+                    isReversed = true;
+                } else if (gamepad1.aWasReleased() && isReversed) {
+                    isReversed = false;
+                }
 
                 if (gamepad2.a) {
                     shootMotor.setPower(1);
