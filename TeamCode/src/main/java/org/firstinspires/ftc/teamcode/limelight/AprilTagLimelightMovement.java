@@ -7,6 +7,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -50,6 +51,10 @@ public class AprilTagLimelightMovement extends OpMode {
         frontRight = hardwareMap.get(DcMotorEx.class, "frontRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
+
+        // Direction settings
+        frontLeft.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.REVERSE);
     }
 
     @Override
@@ -74,6 +79,7 @@ public class AprilTagLimelightMovement extends OpMode {
 
             // Get necessary robot telemetry
             botTelemetry();
+            moveOnAprilTag();
             telemetry.update();
         }
     }
@@ -176,12 +182,12 @@ public class AprilTagLimelightMovement extends OpMode {
             if (fr.getFiducialId() == 24) {
                 telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
                     do {
-                        turnRight();
+                        turnLeft();
                     } while (fr.getTargetXDegrees() > 10);
             } else if (fr.getFiducialId() == 20) {
                 telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
                 do {
-                    turnLeft();
+                    turnRight();
                 } while (fr.getTargetXDegrees() > 10);
             }
         }

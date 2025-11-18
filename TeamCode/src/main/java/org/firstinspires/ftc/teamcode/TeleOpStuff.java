@@ -129,39 +129,37 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
                 // Intake controls (in)
                 if (gamepad2.right_trigger >= 0.5) {
                         intakeMotor.setPower(1);
-                } else {
-                    intakeMotor.setPower(0);
-                }
-                if (gamepad2.dpad_up) {
-                    intakeMotor.setPower(1);
-                } else {
-                    intakeMotor.setPower(0);
-                }
-
-                // Intake controls (out)
-                if (gamepad2.left_trigger >= 0.5) {
-                        intakeMotor.setPower(-1);
-                } else {
-                    intakeMotor.setPower(0);
-                }
-                if (gamepad2.dpad_down) {
+                } else if (gamepad2.left_trigger >= 0.5) {
                     intakeMotor.setPower(-1);
                 } else {
                     intakeMotor.setPower(0);
                 }
+//                if (gamepad2.dpad_up) {
+//                    intakeMotor.setPower(1);
+//                } else {
+//                    intakeMotor.setPower(0);
+//                }
+
+//                Intake controls (out)
+//                if (gamepad2.left_trigger >= 0.5) {
+//                        intakeMotor.setPower(-1);
+//                } else {
+//                    intakeMotor.setPower(0);
+//                }
+//                if (gamepad2.dpad_down) {
+//                    intakeMotor.setPower(-1);
+//                } else {
+//                    intakeMotor.setPower(0);
+//                }
 
                 // Shooter controls (Controllers 1+2)
-                if (gamepad1.square) {
-                    shootMotor.setPower(1);
-                } else {
-                    shootMotor.setPower(0);
-                }
-
-                if (gamepad2.square) {
-                    shootMotor.setPower(1);
-                } else {
-                    shootMotor.setPower(0);
-                }
+//                if (gamepad1.square) {
+//                    shootMotor.setPower(1);
+//                } else if (gamepad2.square) {
+//                    shootMotor.setPower(1);
+//                } else {
+//                    shootMotor.setPower(0);
+//                }
 
 //                if (gamepad2.right_bumper) {
 //                    if (shooterSpeed > 1) {
@@ -178,16 +176,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //                }
 
                 if (gamepad2.a) {
-                    shootGate1.setPower(0.7);
-                    shootGate2.setPower(0.7);
+                    shootMotor.setPower(1);
+                    shootGate1.setPower(-1);
+                    shootGate2.setPower(1);
                 } else {
-                    shootGate1.setPower(0);
-                    shootGate2.setPower(0);
-                }
-                if (gamepad2.b) {
-                    shootGate1.setPower(-0.7);
-                    shootGate1.setPower(-0.7);
-                } else {
+                    shootMotor.setPower(0);
                     shootGate1.setPower(0);
                     shootGate2.setPower(0);
                 }
