@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.autonomousOpModes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous (name = "Extremely Basic Autonomous")
-public class LineMove extends LinearOpMode {
+public class BlueLineMove extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -47,11 +46,11 @@ public class LineMove extends LinearOpMode {
     }
 
     void turnDangIt() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(-0.5);
-        sleep(500);
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
+        sleep(150);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
@@ -63,7 +62,7 @@ public class LineMove extends LinearOpMode {
         frontRight.setPower(0.5);
         backLeft.setPower(0.5);
         backRight.setPower(0.5);
-        sleep(1400);
+        sleep(1200);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);

@@ -92,14 +92,10 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
                 // Gamepad movement code
 
-                double drive = 0;
-                double strafe = 0;
-                double turn = 0;
-                if (!isReversed) {
-                    drive = -gamepad1.left_stick_y;
-                    strafe = gamepad1.left_stick_x;
-                    turn = gamepad1.right_stick_x;
-                } else if (isReversed) {
+                double drive = -gamepad1.left_stick_y;
+                double strafe = gamepad1.left_stick_x;
+                double turn = gamepad1.right_stick_x;
+                if (isReversed) {
                     drive = gamepad1.left_stick_y;
                     strafe = -gamepad1.left_stick_x;
                     turn = -gamepad1.right_stick_x;
@@ -188,18 +184,26 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 //                    }
 //                }
 
-                if (gamepad1.aWasReleased() && !isReversed) {
+                if (gamepad1.aWasPressed() && !isReversed) {
                     isReversed = true;
-                } else if (gamepad1.aWasReleased() && isReversed) {
+                } else if (gamepad1.aWasPressed() && isReversed) {
                     isReversed = false;
                 }
 
                 if (gamepad2.a) {
                     shootMotor.setPower(1);
+//                    shootGate1.setPower(-1);
+//                    shootGate2.setPower(1);
+                } else {
+                    shootMotor.setPower(0);
+//                    shootGate1.setPower(0);
+//                    shootGate2.setPower(0);
+                }
+
+                if (gamepad1.x) {
                     shootGate1.setPower(-1);
                     shootGate2.setPower(1);
                 } else {
-                    shootMotor.setPower(0);
                     shootGate1.setPower(0);
                     shootGate2.setPower(0);
                 }
