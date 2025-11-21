@@ -130,8 +130,8 @@ import java.util.List;
                 double turn = gamepad1.right_stick_x;
                 if (isReversed) {
                     drive = gamepad1.left_stick_y;
-                    strafe = -gamepad1.left_stick_x;
-                    turn = -gamepad1.right_stick_x;
+//                    strafe = -gamepad1.left_stick_x;
+//                    turn = -gamepad1.right_stick_x;
                 }
 
                 leftFrontPower = Range.clip(drive + turn + strafe, -1, 1);
@@ -221,14 +221,16 @@ import java.util.List;
 //                    }
 //                }
 
+                // TODO: remove this
                 if (gamepad1.aWasPressed()) {
                     isReversed = !isReversed;
                 }
 
                 // limelight targeter (NYI (not yet implemented))
-                if (gamepad2.y) {
-
-                }
+                // TODO: finish this control thing
+//                if (gamepad2.y) {
+//
+//                }
 
                 if (gamepad2.a) {
                     shootMotor.setPower(0.8);
@@ -240,9 +242,12 @@ import java.util.List;
 //                    shootGate2.setPower(0);
                 }
 
-                if (gamepad1.x) {
+                if (gamepad2.x) {
                     shootGate1.setPower(-1);
                     shootGate2.setPower(1);
+                } else if (gamepad2.y) {
+                    shootGate1.setPower(1);
+                    shootGate2.setPower(-1);
                 } else {
                     shootGate1.setPower(0);
                     shootGate2.setPower(0);
@@ -343,6 +348,8 @@ import java.util.List;
             - botTelemetry(): See above function comment for more info
             - turnLeft() & turnRight(): Turns robot, see related comment for more info
      */
+
+    // TODO: implement this...
     public void moveOnAprilTag() {
         botTelemetry();
 

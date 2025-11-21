@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "Extremely Basic Autonomous")
+@Autonomous (name = "RedAuto")
 public class LineMove extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -47,10 +47,10 @@ public class LineMove extends LinearOpMode {
     }
 
     void turnDangIt() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(-0.5);
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
         sleep(800);
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -63,7 +63,7 @@ public class LineMove extends LinearOpMode {
         frontRight.setPower(0.5);
         backLeft.setPower(0.5);
         backRight.setPower(0.5);
-        sleep(1400);
+        sleep(1600);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);

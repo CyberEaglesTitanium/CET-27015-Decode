@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "Extremely Basic Autonomous but BLUE")
+@Autonomous (name = "BlueAuto")
 public class BlueLineMove extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
@@ -21,7 +21,7 @@ public class BlueLineMove extends LinearOpMode {
     private CRServo shootGate2;
 
     void launchCodes() {
-        shootMotor.setPower(1);
+        shootMotor.setPower(0.8);
         sleep(1500);
         shootGate1.setPower(-1);
         shootGate2.setPower(1);
@@ -46,10 +46,10 @@ public class BlueLineMove extends LinearOpMode {
     }
 
     void turnDangIt() {
-        frontLeft.setPower(-0.5);
-        frontRight.setPower(0.5);
-        backLeft.setPower(-0.5);
-        backRight.setPower(0.5);
+        frontLeft.setPower(0.5);
+        frontRight.setPower(-0.5);
+        backLeft.setPower(0.5);
+        backRight.setPower(-0.5);
         sleep(800);
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -62,7 +62,7 @@ public class BlueLineMove extends LinearOpMode {
         frontRight.setPower(0.5);
         backLeft.setPower(0.5);
         backRight.setPower(0.5);
-        sleep(1400);
+        sleep(1600);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
