@@ -348,17 +348,14 @@ import java.util.List;
 
         List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
         for (LLResultTypes.FiducialResult fr : fiducialResults) {
-            if (fr.getFiducialId() == 24) {
                 telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
                 do {
                     turnLeft();
-                } while (fr.getTargetXDegrees() > 10);
-            } else if (fr.getFiducialId() == 20) {
-                telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
-                do {
-                    turnRight();
-                } while (fr.getTargetXDegrees() > 10);
-            }
+                } while (fr.getFiducialId() != 24);
+//                do {
+//                    turnRight();
+//                } while (fr.getTargetXDegrees() != 20);
+
         }
         telemetry.update();
     }
