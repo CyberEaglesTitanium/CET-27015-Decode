@@ -51,7 +51,7 @@ public class LineMove extends LinearOpMode {
         frontRight.setPower(0.5);
         backLeft.setPower(-0.5);
         backRight.setPower(0.5);
-        sleep(800);
+        sleep(700);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
