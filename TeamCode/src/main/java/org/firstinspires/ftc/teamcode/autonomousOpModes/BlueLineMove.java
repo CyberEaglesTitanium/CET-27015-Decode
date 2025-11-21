@@ -50,7 +50,7 @@ public class BlueLineMove extends LinearOpMode {
         frontRight.setPower(0.5);
         backLeft.setPower(-0.5);
         backRight.setPower(0.5);
-        sleep(150);
+        sleep(800);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
@@ -62,7 +62,7 @@ public class BlueLineMove extends LinearOpMode {
         frontRight.setPower(0.5);
         backLeft.setPower(0.5);
         backRight.setPower(0.5);
-        sleep(1200);
+        sleep(1400);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);
