@@ -22,7 +22,7 @@ public class LineMove extends LinearOpMode {
     private CRServo shootGate2;
 
     void launchCodes() {
-        shootMotor.setPower(0.8);
+        shootMotor.setPower(0.7);
         sleep(1500);
         shootGate1.setPower(-1);
         shootGate2.setPower(1);

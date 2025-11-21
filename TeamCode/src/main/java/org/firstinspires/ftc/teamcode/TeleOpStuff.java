@@ -242,10 +242,10 @@ import java.util.List;
 //                    shootGate2.setPower(0);
                 }
 
-                if (gamepad2.x) {
+                if (gamepad1.x) {
                     shootGate1.setPower(-1);
                     shootGate2.setPower(1);
-                } else if (gamepad2.y) {
+                } else if (gamepad1.y) {
                     shootGate1.setPower(1);
                     shootGate2.setPower(-1);
                 } else {
