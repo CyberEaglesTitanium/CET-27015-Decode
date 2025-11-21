@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "Extremely Basic Autonomous")
+@Autonomous (name = "Extremely Basic Autonomous but BLUE")
 public class BlueLineMove extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
