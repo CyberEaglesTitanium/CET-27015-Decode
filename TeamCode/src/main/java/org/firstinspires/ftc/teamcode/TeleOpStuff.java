@@ -173,10 +173,10 @@ import java.util.List;
                     intakeMotor.setPower(1);
                 } else if (gamepad2.left_trigger >= 0.5) {
                     intakeMotor.setPower(-1);
-                } else if (gamepad1.right_trigger >= 0.5) {
-                    intakeMotor.setPower(1);
-                } else if (gamepad1.left_trigger >= 0.5) {
-                    intakeMotor.setPower(-1);
+//                } else if (gamepad1.right_trigger >= 0.5) {
+//                    intakeMotor.setPower(1);
+//                } else if (gamepad1.left_trigger >= 0.5) {
+//                    intakeMotor.setPower(-1);
                 } else {
                     intakeMotor.setPower(0);
                 }
@@ -221,10 +221,11 @@ import java.util.List;
 //                    }
 //                }
 
-                if (gamepad1.aWasReleased()) {
+                if (gamepad1.aWasPressed()) {
                     isReversed = !isReversed;
                 }
 
+                // limelight targeter (NYI (not yet implemented))
                 if (gamepad2.y) {
 
                 }
