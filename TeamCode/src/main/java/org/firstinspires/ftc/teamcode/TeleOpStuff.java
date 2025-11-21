@@ -221,10 +221,8 @@ import java.util.List;
 //                    }
 //                }
 
-                if (gamepad1.a && !isReversed) {
-                    isReversed = true;
-                } else if (gamepad1.a && isReversed) {
-                    isReversed = false;
+                if (gamepad1.aWasReleased()) {
+                    isReversed = !isReversed;
                 }
 
                 if (gamepad2.y) {
