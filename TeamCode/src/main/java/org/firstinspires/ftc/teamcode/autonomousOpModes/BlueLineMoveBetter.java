@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.autonomousOpModes;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "RedAuto")
-public class LineMove extends LinearOpMode {
+@Autonomous (name = "BlueAutoBetter")
+public class BlueLineMoveBetter extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -48,10 +47,10 @@ public class LineMove extends LinearOpMode {
     }
 
     void turnDangIt() {
-        frontLeft.setPower(-0.5);
-        frontRight.setPower(0.5);
-        backLeft.setPower(-0.5);
-        backRight.setPower(0.5);
+        frontLeft.setPower(0.5);
+        frontRight.setPower(-0.5);
+        backLeft.setPower(0.5);
+        backRight.setPower(-0.5);
         sleep(700);
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -84,17 +83,17 @@ public class LineMove extends LinearOpMode {
         sleep(250);
         turnDangIt();
         launchCodes();
-//        sleep(250);
-//        turnDangItReverse();
-//        frontLeft.setPower(-0.5);
-//        frontRight.setPower(-0.5);
-//        backLeft.setPower(-0.5);
-//        backRight.setPower(-0.5);
-//        sleep(1600);
-//        frontLeft.setPower(0);
-//        frontRight.setPower(0);
-//        backLeft.setPower(0);
-//        backRight.setPower(0);
+        sleep(250);
+        turnDangItReverse();
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(-0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(-0.5);
+        sleep(800);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
     }
 
     public void runOpMode() {
