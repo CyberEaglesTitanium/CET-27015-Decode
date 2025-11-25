@@ -112,7 +112,7 @@ import java.util.List;
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 
-
+            limelightInit();
 
             // Main loop for the motors
             waitForStart();
@@ -228,9 +228,10 @@ import java.util.List;
 
                 // limelight targeter (NYI (not yet implemented))
                 // TODO: finish this control thing
-//                if (gamepad2.y) {
-//
-//                }
+                if (gamepad2.y) {
+                    botTelemetry();
+                    moveOnAprilTag();
+                }
 
                 if (gamepad2.a) {
                     shootMotor.setPower(0.8);
@@ -359,9 +360,9 @@ import java.util.List;
                 do {
                     turnLeft();
                 } while (fr.getFiducialId() != 24);
-//                do {
-//                    turnRight();
-//                } while (fr.getTargetXDegrees() != 20);
+                do {
+                    turnRight();
+                } while (fr.getTargetXDegrees() != 20);
 
         }
         telemetry.update();
