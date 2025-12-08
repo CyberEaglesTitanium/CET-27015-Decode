@@ -14,22 +14,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.hardware.Servo;
 //import com.qualcomm.robotcore.hardware.DigitalChannel;
-import com.bylazar.configurables.PanelsConfigurables;
-import com.bylazar.configurables.annotations.Configurable;
-import com.bylazar.configurables.annotations.IgnoreConfigurable;
-import com.bylazar.field.FieldManager;
-import com.bylazar.field.PanelsField;
-import com.bylazar.field.Style;
-import com.bylazar.telemetry.PanelsTelemetry;
-import com.bylazar.telemetry.TelemetryManager;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -46,6 +35,9 @@ import java.util.List;
 
         private DcMotorEx intakeMotor;
         private DcMotorEx shootMotor;
+        private DcMotorEx spindexifier;
+
+        private int index;
 
         private Limelight3A limelight;
         private IMU imu;
@@ -57,9 +49,64 @@ import java.util.List;
         private double botX;
         private double botY;
 
-        private CRServo shootGate1;
-        private CRServo shootGate2;
+        // TODO: rename these to reflect new purposes
+        private Servo shootGate1; // Servo flicking device
+        private CRServo shootGate2; // not used??
         // Init gamepad, motors + servo
+
+        void flick() {
+            shootGate1.setPosition(1);
+            sleep(500);
+            shootGate1.setPosition(-1);
+        }
+
+        void spinIndex() {
+            spindexifier.setTargetPosition(-178 * index);
+        }
+
+        void resetSpindexEncoder() {
+            spindexifier.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        }
+
+        void spinUseRight() {
+            if (index == 3) {
+                index = 1;
+            } else {
+                index += 1;
+            }
+            spinIndex();
+            spindexifier.setPower(1);
+        }
+
+        void shootStart() {
+            shootMotor.setPower(1);
+        }
+        void shootStop() {
+            shootMotor.setPower(0);
+        }
+
+        void fullTeleOpShot() {
+            intakeMotor.setPower(1);
+            sleep(250);
+            intakeMotor.setPower(0);
+            spinUseRight();
+            shootStart();
+            sleep(250);
+            flick();
+            sleep(500);
+            shootStop();
+        }
+
+        // also known as mass automation
+        void aimNShoot(int AprilTag) {
+            moveOnAprilTag(AprilTag);
+            sleep(450);
+            // keep space for color sensor
+            spinUseRight();
+            shootStart();
+            sleep(500);
+            shootStop();
+        }
 
         @Override
         public void runOpMode() {
@@ -71,6 +118,7 @@ import java.util.List;
 
             intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
             shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
+            spindexifier = hardwareMap.get(DcMotorEx.class, "spindexifier");
 
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
@@ -84,7 +132,7 @@ import java.util.List;
             RevHubOrientationOnRobot revHubOrientationOnRobot = new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
             imu.initialize(new IMU.Parameters((revHubOrientationOnRobot)));
 
-            shootGate1 = hardwareMap.get(CRServo.class, "shootGate1");
+            shootGate1 = hardwareMap.get(Servo.class, "shootGate1");
             shootGate2 = hardwareMap.get(CRServo.class, "shootGate2");
 
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -95,12 +143,20 @@ import java.util.List;
             intakeMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            spindexifier.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            spindexifier.setTargetPosition(752);
+            spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // Variables
-            double ticks = 	537.7;
 
             double shooterSpeed = 0;
 
             boolean isReversed = false;
+            boolean intakeIsOn = false;
+
+            if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
+
+            }
 
             int whuhPos1 = frontLeft.getCurrentPosition();
             int whuhPos2 = frontRight.getCurrentPosition();
@@ -111,6 +167,8 @@ import java.util.List;
             // Put initialization blocks here.
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
+//            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+//            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
             limelightInit();
 
@@ -128,11 +186,6 @@ import java.util.List;
                 double drive = -gamepad1.left_stick_y;
                 double strafe = gamepad1.left_stick_x;
                 double turn = gamepad1.right_stick_x;
-                if (isReversed) {
-                    drive = gamepad1.left_stick_y;
-//                    strafe = -gamepad1.left_stick_x;
-//                    turn = -gamepad1.right_stick_x;
-                }
 
                 leftFrontPower = Range.clip(drive + turn + strafe, -1, 1);
                 rightFrontPower = Range.clip(drive - turn - strafe, -1, 1);
@@ -166,74 +219,51 @@ import java.util.List;
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
                 telemetry.addData("Shooter Motor Power", shootMotor.getPower());
                 telemetry.addData("Intake Motor Power", intakeMotor.getPower());
+
+                telemetry.addData("Spindexer Positions", spindexifier.getCurrentPosition());
                 telemetry.update();
 
+                // TODO: semi-rewrite
                 // Intake controls (in)
-                if (gamepad2.right_trigger >= 0.5) {
-                    intakeMotor.setPower(1);
-                } else if (gamepad2.left_trigger >= 0.5) {
-                    intakeMotor.setPower(-1);
-                } else if (gamepad1.right_trigger >= 0.5) {
-                    intakeMotor.setPower(1);
-                } else if (gamepad1.left_trigger >= 0.5) {
-                    intakeMotor.setPower(-1);
-                } else {
-                    intakeMotor.setPower(0);
+                if (gamepad2.aWasPressed()) {
+                    intakeIsOn = !intakeIsOn;
                 }
-//                if (gamepad2.dpad_up) {
-//                    intakeMotor.setPower(1);
-//                } else {
-//                    intakeMotor.setPower(0);
-//                }
-
-//                Intake controls (out)
-//                if (gamepad2.left_trigger >= 0.5) {
-//                        intakeMotor.setPower(-1);
-//                } else {
-//                    intakeMotor.setPower(0);
-//                }
-//                if (gamepad2.dpad_down) {
-//                    intakeMotor.setPower(-1);
-//                } else {
-//                    intakeMotor.setPower(0);
-//                }
-
-                // Shooter controls (Controllers 1+2)
-//                if (gamepad1.square) {
-//                    shootMotor.setPower(1);
-//                } else if (gamepad2.square) {
-//                    shootMotor.setPower(1);
-//                } else {
-//                    shootMotor.setPower(0);
-//                }
-
-//                if (gamepad2.right_bumper) {
-//                    if (shooterSpeed > 1) {
-//                        shooterSpeed = 1;
-//                    } else {
-//                        shooterSpeed += 0.1;
-//                    }
-//                } else if (gamepad2.left_bumper) {
-//                    if (shooterSpeed < 0.1) {
-//                        shooterSpeed = 0.1;
-//                    } else {
-//                        shooterSpeed -= 0.1;
-//                    }
-//                }
-
-                // TODO: remove this
-                if (gamepad1.aWasPressed()) {
+                if (intakeIsOn && !isReversed) {
+                    intakeMotor.setPower(1);
+                } else if (isReversed && !intakeIsOn) {
+                    intakeMotor.setPower(-1);
+                }
+                if (gamepad2.bWasPressed()) {
                     isReversed = !isReversed;
                 }
 
+                // TODO: remove this
+//                if (gamepad2.aWasPressed()) {
+//                    isReversed = !isReversed;
+//                }
+
                 // limelight targeter (NYI (not yet implemented))
                 // TODO: finish this control thing
-                if (gamepad2.y) {
-                    botTelemetry();
-                    moveOnAprilTag();
+//                if (gamepad2.y) {
+//                    botTelemetry();
+//                    moveOnAprilTag();
+//                }
+
+                // stupid little flicker
+                if (gamepad2.xWasPressed()) {
+                    flick();
                 }
 
-                if (gamepad2.a) {
+                // TODO: spindexer controls (done?)
+                // Spindexer gamepad controls
+                if (gamepad2.rightBumperWasPressed()) {
+                    spinUseRight();
+                } else {
+                    spindexifier.setPower(0);
+                }
+
+                // TODO: rewrite this entire stupid thing
+                if (gamepad2.right_trigger >= 0.5) {
                     shootMotor.setPower(0.8);
 //                    shootGate1.setPower(-1);
 //                    shootGate2.setPower(1);
@@ -243,16 +273,17 @@ import java.util.List;
 //                    shootGate2.setPower(0);
                 }
 
-                if (gamepad1.x) {
-                    shootGate1.setPower(-1);
-                    shootGate2.setPower(1);
-                } else if (gamepad1.y) {
-                    shootGate1.setPower(1);
-                    shootGate2.setPower(-1);
-                } else {
-                    shootGate1.setPower(0);
-                    shootGate2.setPower(0);
-                }
+                // OLD SHOOTER GATE CODE, DO NOT USE UNLESS REIMPLEMENTED ON BOT
+//                if (gamepad1.x) {
+//                    shootGate1.setPower(-1);
+//                    shootGate2.setPower(1);
+//                } else if (gamepad1.y) {
+//                    shootGate1.setPower(1);
+//                    shootGate2.setPower(-1);
+//                } else {
+//                    shootGate1.setPower(0);
+//                    shootGate2.setPower(0);
+//                }
 
             }
         }
@@ -351,7 +382,7 @@ import java.util.List;
      */
 
     // TODO: implement this...
-    public void moveOnAprilTag() {
+    public void moveOnAprilTag(int AprilTag) {
         botTelemetry();
 
         List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
@@ -359,7 +390,7 @@ import java.util.List;
                 telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
                 do {
                     turnLeft();
-                } while (fr.getFiducialId() != 24);
+                } while (fr.getFiducialId() != AprilTag);
                 do {
                     turnRight();
                 } while (fr.getTargetXDegrees() != 20);
