@@ -49,6 +49,8 @@ import java.util.List;
 
         private String robotSortOrder;
 
+        private boolean kernelPanic;
+
         private double botX;
         private double botY;
 
@@ -164,7 +166,6 @@ import java.util.List;
             spindexifier.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             spindexifier.setTargetPosition(752);
             spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            spindexifier.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             // Variables
 
             double shooterSpeed = 0;
@@ -274,10 +275,10 @@ import java.util.List;
 
                 // TODO: spindexer controls (done?)
                 // Spindexer gamepad controls
-                if (gamepad2.rightBumperWasPressed()) {
+                if (gamepad2.dpadRightWasPressed()) {
                     spinUseRight();
-                } else {
-                    spindexifier.setPower(0);
+                } else if (gamepad1.dpadLeftWasPressed()) {
+                    spinUseLeft();
                 }
 
                 // TODO: rewrite this entire stupid thing
@@ -291,7 +292,26 @@ import java.util.List;
 //                    shootGate2.setPower(0);
                 }
 
-                // FREEWHEEL SPINDEXER ACTIVATE
+                // FREEWHEEL SPINDEXER ACTIVATE (PANIC BUTTON)
+                if (gamepad2.share) {
+                    kernelPanic = true;
+                    spindexifier.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                }
+                if (gamepad2.right_bumper) {
+                    if (!kernelPanic) {
+                        spinUseRight();
+                    } else {
+                        spindexifier.setPower(1);
+                    }
+                } else if (gamepad2.left_bumper) {
+                    if (!kernelPanic) {
+                        spinUseLeft();
+                    } else {
+                        spindexifier.setPower(-1);
+                    }
+                } else if (kernelPanic && !gamepad2.left_bumper && !gamepad2.right_bumper) {
+                    spindexifier.setPower(0);
+                }
 
                 // OLD SHOOTER GATE CODE, DO NOT USE UNLESS REIMPLEMENTED ON BOT
 //                if (gamepad1.x) {
