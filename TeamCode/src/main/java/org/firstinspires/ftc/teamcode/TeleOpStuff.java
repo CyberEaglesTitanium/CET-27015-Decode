@@ -9,10 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.CRServo;
 //import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 //import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -57,11 +55,15 @@ import java.util.List;
         // TODO: rename these to reflect new purposes
         private Servo shootGate1; // Servo flicking device
         private Servo shootGate2; // Servo loading device
-        // Init gamepad, motors + servo
+        // Functions for loading, shooting, flicking, and everything in between
 
-        void flick() {
+
+        void flickNload() {
             shootGate1.setPosition(1);
-            sleep(500);
+            sleep(250);
+            shootGate2.setPosition(-1);
+            sleep(250);
+            shootGate2.setPosition(0);
             shootGate1.setPosition(-1);
         }
 
@@ -70,9 +72,6 @@ import java.util.List;
         }
 
         void resetSpindexEncoder() {
-//            while (limitationImitation == false) {
-//                spindexifier.setPower(1);
-//            }
             spindexifier.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
 
@@ -82,7 +81,7 @@ import java.util.List;
                 index = 1;
             }
             spinIndex();
-            spindexifier.setPower(1);
+            spindexifier.setPower(0.4);
         }
 
         void spinUseLeft() {
@@ -91,7 +90,7 @@ import java.util.List;
                 index = 3;
             }
             spinIndex();
-            spindexifier.setPower(1);
+            spindexifier.setPower(0.4);
         }
 
         void shootStart() {
@@ -108,7 +107,7 @@ import java.util.List;
             spinUseRight();
             shootStart();
             sleep(250);
-            flick();
+            flickNload();
             sleep(500);
             shootStop();
         }
@@ -270,16 +269,18 @@ import java.util.List;
 
                 // stupid little flicker
                 if (gamepad2.xWasPressed()) {
-                    flick();
+                    flickNload();
                 }
+
+                // TODO: click the stick to start shooting, also add power adjustment
 
                 // TODO: spindexer controls (done?)
                 // Spindexer gamepad controls
-                if (gamepad2.dpadRightWasPressed()) {
-                    spinUseRight();
-                } else if (gamepad1.dpadLeftWasPressed()) {
-                    spinUseLeft();
-                }
+//                if (gamepad2.dpadRightWasPressed()) {
+//                    spinUseRight();
+//                } else if (gamepad2.dpadLeftWasPressed()) {
+//                    spinUseLeft();
+//                }
 
                 // TODO: rewrite this entire stupid thing
                 if (gamepad2.right_trigger >= 0.5) {
@@ -293,25 +294,32 @@ import java.util.List;
                 }
 
                 // FREEWHEEL SPINDEXER ACTIVATE (PANIC BUTTON)
-                if (gamepad2.share) {
-                    kernelPanic = true;
-                    spindexifier.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                if (gamepad2.shareWasPressed()) {
+                    kernelPanic = !kernelPanic;
+                    if (kernelPanic) {
+                        spindexifier.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    } else {
+                        spindexifier.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                        resetSpindexEncoder();
+                    }
+
                 }
-                if (gamepad2.right_bumper) {
+                if (gamepad2.rightBumperWasPressed()) {
                     if (!kernelPanic) {
                         spinUseRight();
                     } else {
-                        spindexifier.setPower(1);
+                        spindexifier.setPower(0.4);
                     }
-                } else if (gamepad2.left_bumper) {
+                } else if (gamepad2.leftBumperWasPressed()) {
                     if (!kernelPanic) {
                         spinUseLeft();
                     } else {
-                        spindexifier.setPower(-1);
+                        spindexifier.setPower(-0.4);
                     }
                 } else if (kernelPanic && !gamepad2.left_bumper && !gamepad2.right_bumper) {
                     spindexifier.setPower(0);
                 }
+
 
                 // OLD SHOOTER GATE CODE, DO NOT USE UNLESS REIMPLEMENTED ON BOT
 //                if (gamepad1.x) {
