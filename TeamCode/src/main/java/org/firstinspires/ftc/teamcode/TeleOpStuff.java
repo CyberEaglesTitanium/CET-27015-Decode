@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.CRServo;
 //import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 //import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -36,9 +37,15 @@ import java.util.List;
         private DcMotorEx shootMotor;
         private DcMotorEx spindexifier;
 
-        private DigitalChannel limitationImitation;
+//        private DigitalChannel limitationImitation;
+
+        private ColorSensor colSenseDeluxe;
 
         private int index;
+        private int redColor;
+        private int greenColor;
+        private int blueColor;
+        private int colorSensorCount;
 
         private Limelight3A limelight;
         private IMU imu;
@@ -57,6 +64,21 @@ import java.util.List;
         private Servo shootGate2; // Servo loading device
         // Functions for loading, shooting, flicking, and everything in between
 
+    void redColorSensor() {
+        redColor = colSenseDeluxe.red();
+    }
+    void greenColorSensor() {
+        greenColor = colSenseDeluxe.green();
+    }
+    void blueColorSensor() {
+        blueColor = colSenseDeluxe.blue();
+    }
+
+    void checkColor() {
+        redColorSensor();
+        greenColorSensor();
+        blueColorSensor();
+    }
 
         void flickNload() {
             shootGate1.setPosition(1);
@@ -64,7 +86,18 @@ import java.util.List;
             shootGate2.setPosition(-1);
             sleep(250);
             shootGate2.setPosition(0);
-            shootGate1.setPosition(-1);
+            shootGate1.setPosition(0);
+        }
+
+        void justFlick() {
+            shootGate1.setPosition(1);
+            sleep(200);
+            shootGate1.setPosition(0);
+        }
+        void justLoad() {
+            shootGate2.setPosition(0);
+            sleep(200);
+            shootGate2.setPosition(-1);
         }
 
         void spinIndex() {
@@ -123,6 +156,42 @@ import java.util.List;
             shootStop();
         }
 
+        // Sequential Subspace Spindexer Shenanigans
+        void indexingIntakeSequence() {
+            intakeMotor.setPower(1);
+            if (greenColor > 68) {
+                colorSensorCount += 1;
+            }
+            for (colorSensorCount = colorSensorCount; colorSensorCount < 4; colorSensorCount++) {
+                spinUseRight();
+            }
+        }
+
+        // Sequential Shotgun Of Silly Spheres
+        void shootSequence() {
+            shootMotor.setPower(0.8);
+            sleep(1000);
+            for (colorSensorCount = colorSensorCount; colorSensorCount > 0; colorSensorCount--) {
+                justFlick();
+                sleep(100);
+                spinUseLeft();
+                justLoad();
+                sleep(250);
+            }
+            shootMotor.setPower(0);
+        }
+
+        // Is the color valid? IS IT?!?
+        int colorValid() {
+            if (greenColor == Range.clip(225, 200, 255)) {
+                return 1;
+            } else if (redColor == Range.clip(185, 170, 221) && blueColor == Range.clip(168, 155, 201)) {
+                return 2;
+            } else {
+                return 0;
+            }
+        }
+
         @Override
         public void runOpMode() {
             // Define all motors and servos
@@ -135,8 +204,10 @@ import java.util.List;
             shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
             spindexifier = hardwareMap.get(DcMotorEx.class, "spindexifier");
 
-            limitationImitation = hardwareMap.get(DigitalChannel.class, "limitSwitch");
-            limitationImitation.setMode(DigitalChannel.Mode.INPUT);
+            colSenseDeluxe = hardwareMap.get(ColorSensor.class, "colsense");
+
+//            limitationImitation = hardwareMap.get(DigitalChannel.class, "limitSwitch");
+//            limitationImitation.setMode(DigitalChannel.Mode.INPUT);
 
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
@@ -171,6 +242,8 @@ import java.util.List;
 
             boolean isReversed = false;
             boolean intakeIsOn = false;
+
+            colorSensorCount = 0;
 
             if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
 
@@ -237,6 +310,10 @@ import java.util.List;
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
                 telemetry.addData("Shooter Motor Power", shootMotor.getPower());
                 telemetry.addData("Intake Motor Power", intakeMotor.getPower());
+                telemetry.addData("red", colSenseDeluxe.red());
+                telemetry.addData("green", colSenseDeluxe.green());
+                telemetry.addData("blue", colSenseDeluxe.blue());
+                telemetry.addData("Color Valid Value (purple = 1, green = 2)", colorValid());
 
                 telemetry.addData("Spindexer Positions", spindexifier.getCurrentPosition());
                 telemetry.update();
@@ -273,6 +350,16 @@ import java.util.List;
                 }
 
                 // TODO: click the stick to start shooting, also add power adjustment
+
+                if (gamepad1.aWasPressed()) {
+                    indexingIntakeSequence();
+                }
+                if (gamepad1.bWasPressed()) {
+                    shootSequence();
+                }
+                if (gamepad1.xWasPressed()) {
+                    spinUseRight();
+                }
 
                 // TODO: spindexer controls (done?)
                 // Spindexer gamepad controls
