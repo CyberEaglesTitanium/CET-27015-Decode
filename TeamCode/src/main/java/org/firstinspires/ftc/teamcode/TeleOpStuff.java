@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
@@ -37,6 +38,8 @@ import java.util.List;
         private DcMotorEx shootMotor;
         private DcMotorEx spindexifier;
 
+        private DigitalChannel limitationImitation;
+
         private int index;
 
         private Limelight3A limelight;
@@ -51,7 +54,7 @@ import java.util.List;
 
         // TODO: rename these to reflect new purposes
         private Servo shootGate1; // Servo flicking device
-        private CRServo shootGate2; // not used??
+        private Servo shootGate2; // Servo loading device
         // Init gamepad, motors + servo
 
         void flick() {
@@ -65,14 +68,25 @@ import java.util.List;
         }
 
         void resetSpindexEncoder() {
+//            while (limitationImitation == false) {
+//                spindexifier.setPower(1);
+//            }
             spindexifier.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         }
 
         void spinUseRight() {
-            if (index == 3) {
+            index += 1;
+            if (index == 4) {
                 index = 1;
-            } else {
-                index += 1;
+            }
+            spinIndex();
+            spindexifier.setPower(1);
+        }
+
+        void spinUseLeft() {
+            index -= 1;
+            if (index == 0) {
+                index = 3;
             }
             spinIndex();
             spindexifier.setPower(1);
@@ -120,6 +134,9 @@ import java.util.List;
             shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
             spindexifier = hardwareMap.get(DcMotorEx.class, "spindexifier");
 
+            limitationImitation = hardwareMap.get(DigitalChannel.class, "limitSwitch");
+            limitationImitation.setMode(DigitalChannel.Mode.INPUT);
+
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
             limelight.start();
@@ -133,7 +150,7 @@ import java.util.List;
             imu.initialize(new IMU.Parameters((revHubOrientationOnRobot)));
 
             shootGate1 = hardwareMap.get(Servo.class, "shootGate1");
-            shootGate2 = hardwareMap.get(CRServo.class, "shootGate2");
+            shootGate2 = hardwareMap.get(Servo.class, "shootGate2");
 
             frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -147,6 +164,7 @@ import java.util.List;
             spindexifier.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             spindexifier.setTargetPosition(752);
             spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            spindexifier.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             // Variables
 
             double shooterSpeed = 0;
@@ -273,6 +291,8 @@ import java.util.List;
 //                    shootGate2.setPower(0);
                 }
 
+                // FREEWHEEL SPINDEXER ACTIVATE
+
                 // OLD SHOOTER GATE CODE, DO NOT USE UNLESS REIMPLEMENTED ON BOT
 //                if (gamepad1.x) {
 //                    shootGate1.setPower(-1);
@@ -392,13 +412,29 @@ import java.util.List;
                     turnLeft();
                 } while (fr.getFiducialId() != AprilTag);
                 do {
-                    turnRight();
-                } while (fr.getTargetXDegrees() != 20);
+                    turnLeft();
+                } while (fr.getTargetXDegrees() != 0.3);
 
         }
         telemetry.update();
     }
 
+    public void moveOnAprilTagOtherWay(int AprilTag) {
+        botTelemetry();
+
+        List<LLResultTypes.FiducialResult> fiducialResults = llResult.getFiducialResults();
+        for (LLResultTypes.FiducialResult fr : fiducialResults) {
+            telemetry.addData("AprilTag Target X", fr.getTargetXDegrees());
+            do {
+                turnRight();
+            } while (fr.getFiducialId() != AprilTag);
+            do {
+                turnRight();
+            } while (fr.getTargetXDegrees() != -0.3);
+
+        }
+        telemetry.update();
+    }
     /*
         turnLeft() and turnRight()
 

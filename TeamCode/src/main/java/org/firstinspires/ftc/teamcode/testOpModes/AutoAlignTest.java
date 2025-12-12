@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes;
+package org.firstinspires.ftc.teamcode.testOpModes;
 
 
 import com.qualcomm.hardware.limelightvision.LLResult;
@@ -6,8 +6,8 @@ import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 
 import java.util.List;
 
-@Autonomous (name = "Extremely Basic Autonomous but Limelight")
-public class LineMoveButItShootsWithALimelightInstead extends LinearOpMode {
+@TeleOp(name = "Lime-Flavored Tester")
+public class AutoAlignTest extends LinearOpMode {
     private Limelight3A limelight;
     private IMU imu;
     private LLResult llResult;
@@ -89,23 +89,10 @@ public class LineMoveButItShootsWithALimelightInstead extends LinearOpMode {
     }
 
     void testThing() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(0.5);
-        sleep(1400);
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-        sleep(250);
-        turnRight();
-        sleep(800);
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
         shootAtTag();
+    }
+    void testThing2() {
+        shootAtTagOtherWay();
     }
 
     public void runOpMode() {
@@ -125,7 +112,13 @@ public class LineMoveButItShootsWithALimelightInstead extends LinearOpMode {
 
         waitForStart();
 
-        testThing();
+        while (opModeIsActive()) {
+            if (gamepad1.b) {
+                testThing();
+            }
+        }
+
+
     }
 
     public void botTelemetry () {

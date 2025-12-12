@@ -29,8 +29,8 @@ import java.util.List;
         @Override
         public void runOpMode() {
             // Define all motors and servos
-            spindexifier = hardwareMap.get(DcMotorEx.class, "test");
-            spindexifier.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            spindexifier = hardwareMap.get(DcMotorEx.class, "spindexifier");
+            //spindexifier.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             // Main loop for the motors
             waitForStart();
             while (opModeIsActive()) {
