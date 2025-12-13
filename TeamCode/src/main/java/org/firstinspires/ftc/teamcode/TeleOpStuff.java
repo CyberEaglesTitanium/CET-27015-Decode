@@ -55,6 +55,7 @@ import java.util.List;
         private String robotSortOrder;
 
         private boolean kernelPanic;
+        private boolean areTheIntakeAndSpindexerRunning;
 
         private double botX;
         private double botY;
@@ -159,12 +160,17 @@ import java.util.List;
         // Sequential Subspace Spindexer Shenanigans
         void indexingIntakeSequence() {
             intakeMotor.setPower(1);
-            if (greenColor > 68) {
-                colorSensorCount += 1;
+            while (colorSensorCount < 4) {
+                if (greenColor > 68 && areTheIntakeAndSpindexerRunning) {
+                    colorSensorCount += 1;
+                    spinUseRight();
+                    areTheIntakeAndSpindexerRunning = false;
+                } else {
+                    areTheIntakeAndSpindexerRunning = true;
+                }
             }
-            for (colorSensorCount = colorSensorCount; colorSensorCount < 4; colorSensorCount++) {
-                spinUseRight();
-            }
+
+
         }
 
         // Sequential Shotgun Of Silly Spheres
@@ -406,19 +412,6 @@ import java.util.List;
                 } else if (kernelPanic && !gamepad2.left_bumper && !gamepad2.right_bumper) {
                     spindexifier.setPower(0);
                 }
-
-
-                // OLD SHOOTER GATE CODE, DO NOT USE UNLESS REIMPLEMENTED ON BOT
-//                if (gamepad1.x) {
-//                    shootGate1.setPower(-1);
-//                    shootGate2.setPower(1);
-//                } else if (gamepad1.y) {
-//                    shootGate1.setPower(1);
-//                    shootGate2.setPower(-1);
-//                } else {
-//                    shootGate1.setPower(0);
-//                    shootGate2.setPower(0);
-//                }
 
             }
         }
