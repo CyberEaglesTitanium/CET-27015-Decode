@@ -1,15 +1,16 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.red;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "BlueAuto")
-public class BlueLineMove extends LinearOpMode {
+@Autonomous (name = "RedAuto")
+public class LineMove extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -29,6 +30,7 @@ public class BlueLineMove extends LinearOpMode {
         shootMotor.setPower(0);
         shootGate1.setPower(0);
         shootGate2.setPower(0);
+
 //        sleep(250);
 //        shootGate1.setPower(1);
 //        shootGate2.setPower(1);
@@ -46,10 +48,21 @@ public class BlueLineMove extends LinearOpMode {
     }
 
     void turnDangIt() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(-0.5);
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
+        sleep(700);
+        frontLeft.setPower(0);
+        frontRight.setPower(0);
+        backLeft.setPower(0);
+        backRight.setPower(0);
+    }
+    void turnDangItReverse() {
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
         sleep(700);
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -58,6 +71,7 @@ public class BlueLineMove extends LinearOpMode {
     }
 
     void testThing() {
+        sleep(500);
         frontLeft.setPower(0.5);
         frontRight.setPower(0.5);
         backLeft.setPower(0.5);
@@ -70,6 +84,17 @@ public class BlueLineMove extends LinearOpMode {
         sleep(250);
         turnDangIt();
         launchCodes();
+//        sleep(250);
+//        turnDangItReverse();
+//        frontLeft.setPower(-0.5);
+//        frontRight.setPower(-0.5);
+//        backLeft.setPower(-0.5);
+//        backRight.setPower(-0.5);
+//        sleep(1600);
+//        frontLeft.setPower(0);
+//        frontRight.setPower(0);
+//        backLeft.setPower(0);
+//        backRight.setPower(0);
     }
 
     public void runOpMode() {

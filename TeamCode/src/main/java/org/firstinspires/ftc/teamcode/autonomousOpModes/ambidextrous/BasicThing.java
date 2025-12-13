@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.ambidextrous;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "RedAutoBetter")
-public class LineMoveBetter extends LinearOpMode {
+@Autonomous (name = "BasicLineMove")
+public class BasicThing extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -19,32 +19,6 @@ public class LineMoveBetter extends LinearOpMode {
 
     private CRServo shootGate1;
     private CRServo shootGate2;
-
-    void launchCodes() {
-        shootMotor.setPower(0.7);
-        sleep(1500);
-        shootGate1.setPower(-1);
-        shootGate2.setPower(1);
-        sleep(1500);
-        shootMotor.setPower(0);
-        shootGate1.setPower(0);
-        shootGate2.setPower(0);
-
-//        sleep(250);
-//        shootGate1.setPower(1);
-//        shootGate2.setPower(1);
-//        sleep(100);
-//        shootMotor.setPower(1);
-//        sleep(600);
-//        shootMotor.setPower(0);
-//        sleep(250);
-//        shootGate1.setPower(1);
-//        shootGate2.setPower(1);
-//        sleep(100);
-//        shootMotor.setPower(1);
-//        sleep(600);
-//        shootMotor.setPower(0);
-    }
 
     void turnDangIt() {
         frontLeft.setPower(-0.5);
@@ -58,10 +32,10 @@ public class LineMoveBetter extends LinearOpMode {
         backRight.setPower(0);
     }
     void turnDangItReverse() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(-0.5);
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
         sleep(700);
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -76,20 +50,6 @@ public class LineMoveBetter extends LinearOpMode {
         backLeft.setPower(0.5);
         backRight.setPower(0.5);
         sleep(1600);
-        frontLeft.setPower(0);
-        frontRight.setPower(0);
-        backLeft.setPower(0);
-        backRight.setPower(0);
-        sleep(250);
-        turnDangIt();
-        launchCodes();
-        sleep(250);
-        turnDangItReverse();
-        frontLeft.setPower(-0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(-0.5);
-        backRight.setPower(-0.5);
-        sleep(800);
         frontLeft.setPower(0);
         frontRight.setPower(0);
         backLeft.setPower(0);

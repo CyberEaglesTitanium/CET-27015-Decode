@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
 
-
+@Disabled
 @TeleOp(name = "TeleOp - Red Edition")
     public class TeleOpStuffRed extends LinearOpMode {
 
@@ -86,8 +87,8 @@ import java.util.List;
 
         void justFlick() {
             shootGate1.setPosition(-1);
-            sleep(200);
-            shootGate1.setPosition(0);
+            sleep(500);
+            shootGate1.setPosition(0.5);
         }
         void justLoad() {
             shootGate2.setPosition(0);
@@ -105,18 +106,18 @@ import java.util.List;
 
         void spinUseRight() {
             index += 1;
-            if (index == 4) {
-                index = 1;
-            }
+//            if (index == 4) {
+//                index = 1;
+//            }
             spinIndex();
             spindexifier.setPower(0.4);
         }
 
         void spinUseLeft() {
             index -= 1;
-            if (index == 0) {
-                index = 3;
-            }
+//            if (index == 0) {
+//                index = 3;
+//            }
             spinIndex();
             spindexifier.setPower(0.4);
         }
@@ -128,28 +129,28 @@ import java.util.List;
             shootMotor.setPower(0);
         }
 
-        void fullTeleOpShot() {
-            intakeMotor.setPower(1);
-            sleep(250);
-            intakeMotor.setPower(0);
-            spinUseRight();
-            shootStart();
-            sleep(250);
-            flickNload();
-            sleep(500);
-            shootStop();
-        }
+//        void fullTeleOpShot() {
+//            intakeMotor.setPower(1);
+//            sleep(250);
+//            intakeMotor.setPower(0);
+//            spinUseRight();
+//            shootStart();
+//            sleep(250);
+//            flickNload();
+//            sleep(500);
+//            shootStop();
+//        }
 
         // also known as mass automation
-        void aimNShoot(int AprilTag) {
-            moveOnAprilTag(AprilTag);
-            sleep(450);
-            // keep space for color sensor
-            spinUseRight();
-            shootStart();
-            sleep(500);
-            shootStop();
-        }
+//        void aimNShoot(int AprilTag) {
+//            moveOnAprilTag(AprilTag);
+//            sleep(450);
+//            // keep space for color sensor
+//            spinUseRight();
+//            shootStart();
+//            sleep(500);
+//            shootStop();
+//        }
 
         // Sequential Subspace Spindexer Shenanigans
         void indexingIntakeSequence() {
@@ -207,10 +208,10 @@ import java.util.List;
 
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
-            limelight.start();
+//            limelight.start();
 
             // Switch the pipeline to 0
-            limelight.pipelineSwitch(0);
+//            limelight.pipelineSwitch(0);
 
             // Initialize IMU with hub orientation settings
             imu = hardwareMap.get(IMU.class, "imu");
@@ -258,7 +259,7 @@ import java.util.List;
 //            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 //            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-            limelightInit();
+//            limelightInit();
 
             // Main loop for the motors
             waitForStart();
@@ -393,6 +394,7 @@ import java.util.List;
 //                }
 
                 // TODO: rewrite this entire stupid thing
+
 
 
                 // FREEWHEEL SPINDEXER ACTIVATE (PANIC BUTTON)

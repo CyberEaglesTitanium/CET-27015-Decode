@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.red;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-@Autonomous (name = "BlueAutoBetter")
-public class BlueLineMoveBetter extends LinearOpMode {
+@Autonomous (name = "RedAutoBetter")
+public class LineMoveBetter extends LinearOpMode {
     private DcMotor frontLeft;
     private DcMotor frontRight;
     private DcMotor backLeft;
@@ -47,10 +47,10 @@ public class BlueLineMoveBetter extends LinearOpMode {
     }
 
     void turnDangIt() {
-        frontLeft.setPower(0.5);
-        frontRight.setPower(-0.5);
-        backLeft.setPower(0.5);
-        backRight.setPower(-0.5);
+        frontLeft.setPower(-0.5);
+        frontRight.setPower(0.5);
+        backLeft.setPower(-0.5);
+        backRight.setPower(0.5);
         sleep(700);
         frontLeft.setPower(0);
         frontRight.setPower(0);
@@ -58,10 +58,10 @@ public class BlueLineMoveBetter extends LinearOpMode {
         backRight.setPower(0);
     }
     void turnDangItReverse() {
-        frontLeft.setPower(-0.5);
-        frontRight.setPower(0.5);
-        backLeft.setPower(-0.5);
-        backRight.setPower(0.5);
+        frontLeft.setPower(0.5);
+        frontRight.setPower(-0.5);
+        backLeft.setPower(0.5);
+        backRight.setPower(-0.5);
         sleep(700);
         frontLeft.setPower(0);
         frontRight.setPower(0);

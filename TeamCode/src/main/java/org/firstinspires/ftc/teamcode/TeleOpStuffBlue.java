@@ -24,7 +24,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import java.util.List;
 
 
-@TeleOp(name = "TeleOp - Blue Edition")
+@TeleOp(name = "TeleOp Complete")
     public class TeleOpStuffBlue extends LinearOpMode {
 
         private DcMotorEx frontLeft;
@@ -45,6 +45,9 @@ import java.util.List;
         private int greenColor;
         private int blueColor;
         private int colorSensorCount;
+        private int currentPos;
+
+        private double currentShootPower;
 
         private Limelight3A limelight;
         private IMU imu;
@@ -91,8 +94,8 @@ import java.util.List;
 
     void justFlick() {
         shootGate1.setPosition(-1);
-        sleep(200);
-        shootGate1.setPosition(0);
+        sleep(500);
+        shootGate1.setPosition(0.5);
     }
     void justLoad() {
         shootGate2.setPosition(0);
@@ -101,7 +104,7 @@ import java.util.List;
     }
 
         void spinIndex() {
-            spindexifier.setTargetPosition(-178 * index);
+            spindexifier.setTargetPosition(currentPos * index);
         }
 
         void resetSpindexEncoder() {
@@ -110,20 +113,20 @@ import java.util.List;
 
         void spinUseRight() {
             index += 1;
-            if (index == 4) {
-                index = 1;
-            }
+//            if (index == 4) {
+//                index = 1;
+//            }
             spinIndex();
-            spindexifier.setPower(0.4);
+            spindexifier.setPower(0.3);
         }
 
         void spinUseLeft() {
             index -= 1;
-            if (index == 0) {
-                index = 3;
-            }
+//            if (index == 0) {
+//                index = 3;
+//            }
             spinIndex();
-            spindexifier.setPower(0.4);
+            spindexifier.setPower(0.3);
         }
 
         void shootStart() {
@@ -133,28 +136,28 @@ import java.util.List;
             shootMotor.setPower(0);
         }
 
-        void fullTeleOpShot() {
-            intakeMotor.setPower(1);
-            sleep(250);
-            intakeMotor.setPower(0);
-            spinUseRight();
-            shootStart();
-            sleep(250);
-            flickNload();
-            sleep(500);
-            shootStop();
-        }
+//        void fullTeleOpShot() {
+//            intakeMotor.setPower(1);
+//            sleep(250);
+//            intakeMotor.setPower(0);
+//            spinUseRight();
+//            shootStart();
+//            sleep(250);
+//            flickNload();
+//            sleep(500);
+//            shootStop();
+//        }
 
         // also known as mass automation
-        void aimNShoot(int AprilTag) {
-            moveOnAprilTag(AprilTag);
-            sleep(450);
-            // keep space for color sensor
-            spinUseRight();
-            shootStart();
-            sleep(500);
-            shootStop();
-        }
+//        void aimNShoot(int AprilTag) {
+//            moveOnAprilTag(AprilTag);
+//            sleep(450);
+//            // keep space for color sensor
+//            spinUseRight();
+//            shootStart();
+//            sleep(500);
+//            shootStop();
+//        }
 
         // Sequential Subspace Spindexer Shenanigans
         void indexingIntakeSequence() {
@@ -212,10 +215,10 @@ import java.util.List;
 
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
-            limelight.start();
+//            limelight.start();
 
             // Switch the pipeline to 0
-            limelight.pipelineSwitch(0);
+//            limelight.pipelineSwitch(0);
 
             // Initialize IMU with hub orientation settings
             imu = hardwareMap.get(IMU.class, "imu");
@@ -239,13 +242,14 @@ import java.util.List;
             spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // Variables
 
-            double shooterSpeed = 0;
+            currentShootPower = 0.5;
 
             boolean isReversed = false;
             boolean intakeIsOn = false;
             boolean shooterIsOn = false;
 
             colorSensorCount = 0;
+            currentPos = -178;
 
             if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
 
@@ -263,7 +267,7 @@ import java.util.List;
 //            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 //            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
-            limelightInit();
+//            limelightInit();
 
             // Main loop for the motors
             waitForStart();
@@ -291,6 +295,7 @@ import java.util.List;
                     leftBackPower /= 2;
                     rightFrontPower /= 2;
                     rightBackPower /= 2;
+//                    currentShootPower /= 1.4;
                 }
 
                 if (gamepad1.right_bumper) {
@@ -298,6 +303,7 @@ import java.util.List;
                     leftBackPower *= 1.8;
                     rightFrontPower *= 1.8;
                     rightBackPower *= 1.8;
+//                    currentShootPower *= 1.7;
                 }
 
                 // Sets the power when gamepad
@@ -355,33 +361,33 @@ import java.util.List;
 
                 // TODO: click the stick to start shooting, also add power adjustment
 
-                if (gamepad1.aWasPressed()) {
-                    indexingIntakeSequence();
-                }
-                if (gamepad1.bWasPressed()) {
-                    moveOnAprilTag(20);
-                }
+//                if (gamepad1.aWasPressed()) {
+//                    indexingIntakeSequence();
+//                }
+//                if (gamepad1.bWasPressed()) {
+//                    moveOnAprilTag(20);
+//                }
                 if (gamepad2.yWasPressed()) {
                     shooterIsOn = !shooterIsOn;
 
                 }
-                if (gamepad2.xWasPressed()) {
-                    moveOnAprilTag(20);
-                    sleep(500);
-                    shootSequence();
-                }
+//                if (gamepad2.xWasPressed()) {
+//                    moveOnAprilTag(20);
+//                    sleep(500);
+//                    shootSequence();
+//                }
                 if (gamepad1.yWasPressed()) {
                     shooterIsOn = !shooterIsOn;
 
                 }
-                if (gamepad1.xWasPressed()) {
-                    moveOnAprilTag(20);
-                    sleep(500);
-                    shootSequence();
-                }
+//                if (gamepad1.xWasPressed()) {
+//                    moveOnAprilTag(20);
+//                    sleep(500);
+//                    shootSequence();
+//                }
 
                 if (shooterIsOn) {
-                    shootMotor.setPower(0.8);
+                    shootMotor.setPower(currentShootPower);
                 } else {
                     shootMotor.setPower(0);
                 }
@@ -402,6 +408,22 @@ import java.util.List;
 
                 // TODO: rewrite this entire stupid thing
 
+//                if (gamepad2.dpadLeftWasPressed()) {
+//                    spindexifier.setTargetPosition(currentPos - 5);
+//                    spinUseRight();
+//                    spindexifier.setPower(0.3);
+//                } else if (gamepad2.dpadRightWasPressed()) {
+//                    spindexifier.setTargetPosition(currentPos + 5);
+//                    spindexifier.setPower(0.3);
+//                } else {
+//                    spindexifier.setPower(0);
+//                }
+                if (gamepad2.dpadUpWasPressed()) {
+                    currentShootPower += 0.1;
+                }
+                if (gamepad2.dpadDownWasPressed()) {
+                    currentShootPower -= 0.1;
+                }
 
                 // FREEWHEEL SPINDEXER ACTIVATE (PANIC BUTTON)
                 if (gamepad2.shareWasPressed()) {
@@ -418,13 +440,13 @@ import java.util.List;
                     if (!kernelPanic) {
                         spinUseRight();
                     } else {
-                        spindexifier.setPower(0.4);
+                        spindexifier.setPower(0.3);
                     }
                 } else if (gamepad2.leftBumperWasPressed()) {
                     if (!kernelPanic) {
                         spinUseLeft();
                     } else {
-                        spindexifier.setPower(-0.4);
+                        spindexifier.setPower(-0.3);
                     }
                 } else if (kernelPanic && !gamepad2.left_bumper && !gamepad2.right_bumper) {
                     spindexifier.setPower(0);
