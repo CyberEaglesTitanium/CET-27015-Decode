@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 
-@TeleOp(name = "Get Target Ticks From Spindexifier")
+@TeleOp(name = "Test Target Ticks From Spindexifier With A Gamepad")
     public class TestTargetTicksWithGamepad extends LinearOpMode {
 
         private DcMotorEx spindexifier;

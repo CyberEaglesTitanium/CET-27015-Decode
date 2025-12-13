@@ -6,18 +6,12 @@ import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-//import com.qualcomm.robotcore.hardware.CRServo;
-//import com.qualcomm.robotcore.hardware.ColorRangeSensor;
-//import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-//import com.qualcomm.robotcore.hardware.Servo;
-//import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
@@ -25,8 +19,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 import java.util.List;
 
 
-@TeleOp(name = "TeleOpStuff")
-    public class TeleOpStuff extends LinearOpMode {
+@TeleOp(name = "TeleOp - Red Edition")
+    public class TeleOpStuffRed extends LinearOpMode {
 
         private DcMotorEx frontLeft;
         private DcMotorEx frontRight;
@@ -91,14 +85,14 @@ import java.util.List;
         }
 
         void justFlick() {
-            shootGate1.setPosition(1);
+            shootGate1.setPosition(-1);
             sleep(200);
             shootGate1.setPosition(0);
         }
         void justLoad() {
             shootGate2.setPosition(0);
             sleep(200);
-            shootGate2.setPosition(-1);
+            shootGate2.setPosition(1);
         }
 
         void spinIndex() {
@@ -175,16 +169,12 @@ import java.util.List;
 
         // Sequential Shotgun Of Silly Spheres
         void shootSequence() {
-            shootMotor.setPower(0.8);
-            sleep(1000);
-            for (colorSensorCount = colorSensorCount; colorSensorCount > 0; colorSensorCount--) {
+//            for (colorSensorCount = colorSensorCount; colorSensorCount > 0; colorSensorCount--) {
                 justFlick();
                 sleep(100);
-                spinUseLeft();
+                spinUseRight();
                 justLoad();
-                sleep(250);
-            }
-            shootMotor.setPower(0);
+//            }
         }
 
         // Is the color valid? IS IT?!?
@@ -248,6 +238,7 @@ import java.util.List;
 
             boolean isReversed = false;
             boolean intakeIsOn = false;
+            boolean shooterIsOn = false;
 
             colorSensorCount = 0;
 
@@ -351,9 +342,9 @@ import java.util.List;
 //                }
 
                 // stupid little flicker
-                if (gamepad2.xWasPressed()) {
-                    flickNload();
-                }
+//                if (gamepad2.xWasPressed()) {
+//                    flickNload();
+//                }
 
                 // TODO: click the stick to start shooting, also add power adjustment
 
@@ -361,12 +352,38 @@ import java.util.List;
                     indexingIntakeSequence();
                 }
                 if (gamepad1.bWasPressed()) {
+                    moveOnAprilTag(24);
+                }
+                if (gamepad2.yWasPressed()) {
+                    shooterIsOn = !shooterIsOn;
+
+                }
+                if (gamepad2.xWasPressed()) {
+                    moveOnAprilTag(24);
+                    sleep(500);
                     shootSequence();
                 }
+                if (gamepad1.yWasPressed()) {
+                    shooterIsOn = !shooterIsOn;
+
+                }
                 if (gamepad1.xWasPressed()) {
-                    spinUseRight();
+                    moveOnAprilTag(24);
+                    sleep(500);
+                    shootSequence();
+                }
+                if (shooterIsOn) {
+                    shootMotor.setPower(0.8);
+                } else {
+                    shootMotor.setPower(0);
                 }
 
+                if (gamepad2.right_trigger > 0.5) {
+                    justFlick();
+                }
+                if (gamepad2.left_trigger > 0.5) {
+                    justLoad();
+                }
                 // TODO: spindexer controls (done?)
                 // Spindexer gamepad controls
 //                if (gamepad2.dpadRightWasPressed()) {
@@ -376,15 +393,7 @@ import java.util.List;
 //                }
 
                 // TODO: rewrite this entire stupid thing
-                if (gamepad2.right_trigger >= 0.5) {
-                    shootMotor.setPower(0.8);
-//                    shootGate1.setPower(-1);
-//                    shootGate2.setPower(1);
-                } else {
-                    shootMotor.setPower(0);
-//                    shootGate1.setPower(0);
-//                    shootGate2.setPower(0);
-                }
+
 
                 // FREEWHEEL SPINDEXER ACTIVATE (PANIC BUTTON)
                 if (gamepad2.shareWasPressed()) {
