@@ -12,12 +12,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.hardware.Servo;
 //import com.qualcomm.robotcore.hardware.DigitalChannel;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
@@ -37,6 +39,7 @@ import java.util.List;
         private DcMotorEx spindexifier;
 
 //        private DigitalChannel limitationImitation;
+    private DigitalChannel breakingBeams;
 
         private ColorSensor colSenseDeluxe;
 
@@ -48,6 +51,9 @@ import java.util.List;
         private int currentPos;
 
         private double currentShootPower;
+
+        private double currentShooterRPM;
+        private double currentShooterTPS;
 
         private Limelight3A limelight;
         private IMU imu;
@@ -178,10 +184,13 @@ import java.util.List;
         // Sequential Shotgun Of Silly Spheres
         void shootSequence() {
 //            for (colorSensorCount = colorSensorCount; colorSensorCount > 0; colorSensorCount--) {
+                shootStart();
+                spinUseRight();
+                sleep(750);
                 justFlick();
                 sleep(100);
-                spinUseRight();
                 justLoad();
+
 //            }
         }
 
@@ -194,6 +203,29 @@ import java.util.List;
             } else {
                 return 0;
             }
+        }
+        int beamBroken() {
+            if (breakingBeams.getState()) {
+                return 1;
+            } else {
+                return 0;
+        }
+    }
+
+        // Get the current RPM
+        void getTheRPM() {
+            currentShooterRPM = (shootMotor.getVelocity() / 28) * 60;
+        }
+
+        // Get the current Ticks Per Second
+        double getTheTPS(int RPM) {
+            return (RPM * 28) / 60;
+        }
+
+        // Set shooter velocity
+        void setShooterVelocity(int RPM) {
+            double currentVel = getTheTPS(RPM);
+            shootMotor.setVelocity(currentVel);
         }
 
         @Override
@@ -212,6 +244,8 @@ import java.util.List;
 
 //            limitationImitation = hardwareMap.get(DigitalChannel.class, "limitSwitch");
 //            limitationImitation.setMode(DigitalChannel.Mode.INPUT);
+            breakingBeams = hardwareMap.get(DigitalChannel.class, "breakingBeams");
+            breakingBeams.setMode(DigitalChannel.Mode.INPUT);
 
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
@@ -244,6 +278,9 @@ import java.util.List;
 
             currentShootPower = 0.5;
 
+            double TICKS_PER_REV = 145.1;
+            double TICKS_PER_REV_SHOOTER = (shootMotor.getVelocity() / 28) * 60;
+
             boolean isReversed = false;
             boolean intakeIsOn = false;
             boolean shooterIsOn = false;
@@ -272,6 +309,7 @@ import java.util.List;
             // Main loop for the motors
             waitForStart();
             while (opModeIsActive()) {
+                getTheRPM();
 
                 double leftFrontPower;
                 double rightFrontPower;
@@ -317,14 +355,19 @@ import java.util.List;
                 telemetry.addData("BackLeftMotor Speed", leftBackPower);
                 telemetry.addData("BackRightMotor Speed", rightBackPower);
                 telemetry.addData("Shooter Motor Power", shootMotor.getPower());
+                telemetry.addData("Shooter Motor Speed", currentShooterRPM);
+                telemetry.addData("Shooter Motor Raw Speed", shootMotor.getVelocity());
                 telemetry.addData("Intake Motor Power", intakeMotor.getPower());
+                telemetry.addData("Intake Motor Speed", intakeMotor.getVelocity());
                 telemetry.addData("red", colSenseDeluxe.red());
                 telemetry.addData("green", colSenseDeluxe.green());
                 telemetry.addData("blue", colSenseDeluxe.blue());
-                telemetry.addData("Color Valid Value (purple = 1, green = 2)", colorValid());
+//                telemetry.addData("Color Valid Value (purple = 1, green = 2)", colorValid());
 
                 telemetry.addData("Spindexer Positions", spindexifier.getCurrentPosition());
                 telemetry.update();
+
+
 
                 // TODO: semi-rewrite
                 // Intake controls (in)
@@ -419,10 +462,14 @@ import java.util.List;
 //                    spindexifier.setPower(0);
 //                }
                 if (gamepad2.dpadUpWasPressed()) {
-                    currentShootPower += 0.1;
+                    if (currentShootPower < 1) {
+                        currentShootPower += 0.1;
+                    }
                 }
                 if (gamepad2.dpadDownWasPressed()) {
-                    currentShootPower -= 0.1;
+                    if (currentShootPower > 0) {
+                        currentShootPower -= 0.1;
+                    }
                 }
 
                 // FREEWHEEL SPINDEXER ACTIVATE (PANIC BUTTON)
