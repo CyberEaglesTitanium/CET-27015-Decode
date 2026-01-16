@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.hardware.sparkfun.SparkFunOTOS;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 //import com.qualcomm.robotcore.hardware.CRServo;
@@ -39,9 +40,10 @@ import java.util.List;
         private DcMotorEx spindexifier;
 
 //        private DigitalChannel limitationImitation;
-    private DigitalChannel breakingBeams;
+        private DigitalChannel breakingBeams;
 
         private ColorSensor colSenseDeluxe;
+        private SparkFunOTOS otos;
 
         private int index;
         private int redColor;
@@ -137,6 +139,7 @@ import java.util.List;
 
         void shootStart() {
             shootMotor.setPower(1);
+            intakeMotor.setPower(0);
         }
         void shootStop() {
             shootMotor.setPower(0);
@@ -154,16 +157,22 @@ import java.util.List;
 //            shootStop();
 //        }
 
-        // also known as mass automation
-//        void aimNShoot(int AprilTag) {
-//            moveOnAprilTag(AprilTag);
-//            sleep(450);
-//            // keep space for color sensor
-//            spinUseRight();
+        // also known as mass automation (also known as the results of an addiction to minecraft factory modpacks)
+        void aimNShoot() {
 //            shootStart();
-//            sleep(500);
-//            shootStop();
-//        }
+            spinUseLeft();
+            sleep(800);
+            justFlick();
+            sleep(400);
+//            justLoad();
+//            sleep(250);
+        }
+
+        void emergencyStop() {
+            spindexifier.setPower(0);
+            shootMotor.setPower(0);
+            shootGate1.setPosition(0.5);
+        }
 
         // Sequential Subspace Spindexer Shenanigans
         void indexingIntakeSequence() {
@@ -246,6 +255,8 @@ import java.util.List;
 //            limitationImitation.setMode(DigitalChannel.Mode.INPUT);
             breakingBeams = hardwareMap.get(DigitalChannel.class, "breakingBeams");
             breakingBeams.setMode(DigitalChannel.Mode.INPUT);
+
+            otos = hardwareMap.get(SparkFunOTOS.class, "otos");
 
             limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
@@ -359,6 +370,7 @@ import java.util.List;
                 telemetry.addData("Shooter Motor Raw Speed", shootMotor.getVelocity());
                 telemetry.addData("Intake Motor Power", intakeMotor.getPower());
                 telemetry.addData("Intake Motor Speed", intakeMotor.getVelocity());
+                telemetry.addData("Current OTOS position", otos.getPosition());
                 telemetry.addData("red", colSenseDeluxe.red());
                 telemetry.addData("green", colSenseDeluxe.green());
                 telemetry.addData("blue", colSenseDeluxe.blue());
@@ -398,9 +410,9 @@ import java.util.List;
 //                }
 
                 // stupid little flicker
-//                if (gamepad2.xWasPressed()) {
-//                    flickNload();
-//                }
+                if (gamepad2.xWasPressed()) {
+                    emergencyStop();
+                }
 
                 // TODO: click the stick to start shooting, also add power adjustment
 
@@ -411,8 +423,8 @@ import java.util.List;
 //                    moveOnAprilTag(20);
 //                }
                 if (gamepad2.yWasPressed()) {
-                    shooterIsOn = !shooterIsOn;
-
+//                    shooterIsOn = !shooterIsOn;
+                    aimNShoot();
                 }
 //                if (gamepad2.xWasPressed()) {
 //                    moveOnAprilTag(20);
