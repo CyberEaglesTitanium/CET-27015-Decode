@@ -34,6 +34,8 @@ public class BlueBackwardsAutoLaunchPedro extends OpMode {
     private Servo shootGate1; // Servo flicking device
     private Servo shootGate2; // Servo loading device
 
+
+
     @Override
     public void init() {
         pathTimer = new Timer();
@@ -44,6 +46,8 @@ public class BlueBackwardsAutoLaunchPedro extends OpMode {
         pauseTimer = new Timer();
         opmodeTimer.resetTimer();
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
+
+        pauseTimerIsLoaded = false;
 
         spindexifier = hardwareMap.get(DcMotorEx.class, "spindexifier");
         shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
@@ -122,7 +126,7 @@ public class BlueBackwardsAutoLaunchPedro extends OpMode {
                 break;
             case 1:
                 if (!follower.isBusy()) {
-                    if (pathTimer.getElapsedTimeSeconds() > 1) {
+                    if (pathTimer.getElapsedTimeSeconds() > 5) {
                         follower.resumePathFollowing();
                         setPathState(2);
                     } else {
@@ -207,7 +211,7 @@ public class BlueBackwardsAutoLaunchPedro extends OpMode {
         if (justFlickTimerIsLoaded) {
             if (justFlickTimer.getElapsedTime() >= 200) {
                 justFlickTimerIsLoaded = false;
-                justLoadEnd();
+                justFlickEnd();
             }
         }
 
