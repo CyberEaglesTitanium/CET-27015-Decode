@@ -25,10 +25,10 @@ public class ShooterLogic {
 
     private FlywheelState flywheelState;
 
-    private double FLICK_OPEN_POS = -1;
-    private double LOAD_OPEN_POS = 0;
-    private double FLICK_CLOSE_POS = 0.5;
-    private double LOAD_CLOSE_POS = 1;
+    private double FLICK_STARTER_POS = 0.5;
+    private double LOAD_OPEN_POS = 1;
+    private double FLICK_HAMMER_POS = -1;
+    private double LOAD_CLOSE_POS = 0;
 
     private int BASE_INDEXER_POS = -178;
 
@@ -57,17 +57,17 @@ public class ShooterLogic {
         flywheelState = FlywheelState.IDLE;
 
         shootMotor.setPower(0);
-        flickServo.setPosition(FLICK_CLOSE_POS);
-        loadServo.setPosition(LOAD_CLOSE_POS);
+        flickServo.setPosition(FLICK_STARTER_POS);
+        loadServo.setPosition(LOAD_OPEN_POS);
     }
 
     public void update() {
         switch (flywheelState) {
             case IDLE:
                 if (shotsRemaining > 0) {
-                    flickServo.setPosition(FLICK_CLOSE_POS);
+                    flickServo.setPosition(FLICK_HAMMER_POS);
                     loadServo.setPosition(LOAD_OPEN_POS);
-                    shootMotor.setPower(TARGET_FLYWHEEL_RPM);
+                    shootMotor.setPower(0);
 
                     stateTimer.reset();
                     flywheelState = FlywheelState.SPIN_UP;
@@ -75,8 +75,8 @@ public class ShooterLogic {
                 break;
             case SPIN_UP:
                 if (flywheelVelocity > MIN_FLYWHEEL_RPM || stateTimer.seconds() > MAX_FLYWHEEL_TIME) {
-                    spinUseLeft();
                     loadServo.setPosition(LOAD_OPEN_POS);
+                    shootMotor.setPower(TARGET_FLYWHEEL_RPM);
                     stateTimer.reset();
 
                     flywheelState = FlywheelState.LOAD;
@@ -84,19 +84,21 @@ public class ShooterLogic {
                 break;
             case LOAD:
                 if (stateTimer.seconds() > FLICK_OPEN_TIME) {
-                    flickServo.setPosition(FLICK_OPEN_POS);
+                    flickServo.setPosition(FLICK_STARTER_POS);
                     stateTimer.reset();
                     if (stateTimer.seconds() > 2.5) {
                         flywheelState = FlywheelState.LAUNCH;
                     }
                 } else {
-                    flickServo.setPosition(FLICK_CLOSE_POS);
+                    flickServo.setPosition(FLICK_HAMMER_POS);
                 }
                 break;
             case LAUNCH:
+                stateTimer.reset();
                 if (stateTimer.seconds() > LOAD_OPEN_TIME) {
                     shotsRemaining--;
                     loadServo.setPosition(LOAD_CLOSE_POS);
+                    spinUseLeft();
                     stateTimer.reset();
 
                     flywheelState = FlywheelState.RESET;
@@ -109,7 +111,7 @@ public class ShooterLogic {
                     if (shotsRemaining > 0) {
                         stateTimer.reset();
 
-                        flywheelState = FlywheelState.SPIN_UP;
+                        flywheelState = FlywheelState.LOAD;
                     } else {
                         shootMotor.setPower(0);
                         flywheelState = FlywheelState.IDLE;

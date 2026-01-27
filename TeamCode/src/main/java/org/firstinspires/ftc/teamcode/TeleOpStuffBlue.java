@@ -109,8 +109,10 @@ import java.util.TimerTask;
         }
 
     void justFlick() {
+        // Hammer position
         shootGate1.setPosition(-1);
         sleep(500);
+        // Starter position
         shootGate1.setPosition(0.5);
     }
     void justLoad() {
