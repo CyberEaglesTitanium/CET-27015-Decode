@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 //import com.qualcomm.robotcore.hardware.Servo;
 //import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -25,7 +26,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 import java.util.List;
-
+import java.util.Timer;
+import java.util.TimerTask;
 
 @TeleOp(name = "TeleOp Complete")
     public class TeleOpStuffBlue extends LinearOpMode {
@@ -61,6 +63,12 @@ import java.util.List;
         private IMU imu;
         private LLResult llResult;
         private Pose3D botPose;
+
+        private Timer timer1;
+        private TimerTask flick;
+        // ^^ evil evil little pieces of-
+
+        private ElapsedTime elapsingTime = new ElapsedTime();
 
         private String robotSortOrder;
 
@@ -101,8 +109,10 @@ import java.util.List;
         }
 
     void justFlick() {
+        // Hammer position
         shootGate1.setPosition(-1);
         sleep(500);
+        // Starter position
         shootGate1.setPosition(0.5);
     }
     void justLoad() {
@@ -160,7 +170,10 @@ import java.util.List;
         // also known as mass automation (also known as the results of an addiction to minecraft factory modpacks)
         void aimNShoot() {
 //            shootStart();
-            spinUseLeft();
+            while (opModeIsActive() && (elapsingTime.seconds() < 0.8)) {
+                spinUseLeft();
+            }
+
             sleep(800);
             justFlick();
             sleep(400);
@@ -287,7 +300,7 @@ import java.util.List;
             spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // Variables
 
-            currentShootPower = 0.5;
+            currentShootPower = 0.6;
 
             double TICKS_PER_REV = 145.1;
             double TICKS_PER_REV_SHOOTER = (shootMotor.getVelocity() / 28) * 60;
@@ -299,9 +312,12 @@ import java.util.List;
             colorSensorCount = 0;
             currentPos = -178;
 
-            if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
 
-            }
+            otos.setPosition(new SparkFunOTOS.Pose2D());
+
+//            if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
+//
+//            }
 
             int whuhPos1 = frontLeft.getCurrentPosition();
             int whuhPos2 = frontRight.getCurrentPosition();
@@ -361,19 +377,19 @@ import java.util.List;
                 backLeft.setPower(leftBackPower /= 1.8);
                 backRight.setPower(rightBackPower /= 1.8);
 
-                telemetry.addData("FrontLeftMotor Speed", leftFrontPower);
-                telemetry.addData("FrontRightMotor Speed", rightFrontPower);
-                telemetry.addData("BackLeftMotor Speed", leftBackPower);
-                telemetry.addData("BackRightMotor Speed", rightBackPower);
-                telemetry.addData("Shooter Motor Power", shootMotor.getPower());
-                telemetry.addData("Shooter Motor Speed", currentShooterRPM);
-                telemetry.addData("Shooter Motor Raw Speed", shootMotor.getVelocity());
-                telemetry.addData("Intake Motor Power", intakeMotor.getPower());
-                telemetry.addData("Intake Motor Speed", intakeMotor.getVelocity());
+//                telemetry.addData("FrontLeftMotor Speed", leftFrontPower);
+//                telemetry.addData("FrontRightMotor Speed", rightFrontPower);
+//                telemetry.addData("BackLeftMotor Speed", leftBackPower);
+//                telemetry.addData("BackRightMotor Speed", rightBackPower);
+//                telemetry.addData("Shooter Motor Power", shootMotor.getPower());
+//                telemetry.addData("Shooter Motor Speed", currentShooterRPM);
+//                telemetry.addData("Shooter Motor Raw Speed", shootMotor.getVelocity());
+//                telemetry.addData("Intake Motor Power", intakeMotor.getPower());
+//                telemetry.addData("Intake Motor Speed", intakeMotor.getVelocity());
                 telemetry.addData("Current OTOS position", otos.getPosition());
-                telemetry.addData("red", colSenseDeluxe.red());
-                telemetry.addData("green", colSenseDeluxe.green());
-                telemetry.addData("blue", colSenseDeluxe.blue());
+//                telemetry.addData("red", colSenseDeluxe.red());
+//                telemetry.addData("green", colSenseDeluxe.green());
+//                telemetry.addData("blue", colSenseDeluxe.blue());
 //                telemetry.addData("Color Valid Value (purple = 1, green = 2)", colorValid());
 
                 telemetry.addData("Spindexer Positions", spindexifier.getCurrentPosition());
