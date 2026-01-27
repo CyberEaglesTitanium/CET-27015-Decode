@@ -298,7 +298,7 @@ import java.util.TimerTask;
             spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // Variables
 
-            currentShootPower = 0.5;
+            currentShootPower = 0.6;
 
             double TICKS_PER_REV = 145.1;
             double TICKS_PER_REV_SHOOTER = (shootMotor.getVelocity() / 28) * 60;
@@ -310,9 +310,12 @@ import java.util.TimerTask;
             colorSensorCount = 0;
             currentPos = -178;
 
-            if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
 
-            }
+            otos.setPosition(new SparkFunOTOS.Pose2D());
+
+//            if (spindexifier.getCurrentPosition() == (751.8 / 3)) {
+//
+//            }
 
             int whuhPos1 = frontLeft.getCurrentPosition();
             int whuhPos2 = frontRight.getCurrentPosition();
