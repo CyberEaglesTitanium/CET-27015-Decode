@@ -84,12 +84,13 @@ public class ShooterLogic {
                 break;
             case LOAD:
                 if (stateTimer.seconds() > FLICK_OPEN_TIME) {
-                    flickServo.setPosition(FLICK_CLOSE_POS);
-                    stateTimer.reset();
-
-                    flywheelState = FlywheelState.LAUNCH;
-                } else {
                     flickServo.setPosition(FLICK_OPEN_POS);
+                    stateTimer.reset();
+                    if (stateTimer.seconds() > 2.5) {
+                        flywheelState = FlywheelState.LAUNCH;
+                    }
+                } else {
+                    flickServo.setPosition(FLICK_CLOSE_POS);
                 }
                 break;
             case LAUNCH:
@@ -113,15 +114,14 @@ public class ShooterLogic {
                         shootMotor.setPower(0);
                         flywheelState = FlywheelState.IDLE;
                     }
-                    break;
                 }
+                break;
         }
     }
 
     public void fireShots(int numberOfShots) {
         if (flywheelState == FlywheelState.IDLE) {
             shotsRemaining = numberOfShots;
-
         }
     }
 

@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -13,8 +10,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Blue Auto from Goal, Pedro Edition", group = "Autonomous")
-public class BlueBackwardsPedro2 extends OpMode {
+@Autonomous(name = "only shooters in pedropathing", group = "Autonomous")
+public class OnlyShooterPedro extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -23,9 +20,7 @@ public class BlueBackwardsPedro2 extends OpMode {
     private boolean shotsTriggered = false;
 
     public enum PathState {
-        DRIVE_FROM_GOAL,
-        SHOOT_PRELOADED,
-        STRAFE_OUT
+        SHOOT_PRELOADED
     }
 
     private PathState pathState;
@@ -49,10 +44,6 @@ public class BlueBackwardsPedro2 extends OpMode {
 
     public void statePathUpdatifier() {
         switch (pathState) {
-            case DRIVE_FROM_GOAL:
-                follower.followPath(startToShoot, true);
-                setPathState(PathState.SHOOT_PRELOADED);
-                break;
             case SHOOT_PRELOADED:
                 if (!follower.isBusy()) {
                     //requested shots??
@@ -62,14 +53,8 @@ public class BlueBackwardsPedro2 extends OpMode {
                             shotsTriggered = true;
                         }
                     } else if (shotsTriggered && !follower.isBusy()) {
-                        follower.followPath(shootToEnd, true);
-                        setPathState(PathState.STRAFE_OUT);
+                        telemetry.addLine("artifacts launched, check physical location to see if this is correct");
                     }
-                }
-                break;
-            case STRAFE_OUT:
-                if (!follower.isBusy()) {
-                    telemetry.addLine("Done all paths");
                 }
                 break;
             default:
@@ -86,7 +71,7 @@ public class BlueBackwardsPedro2 extends OpMode {
     }
 
     public void init() {
-        pathState = PathState.DRIVE_FROM_GOAL;
+        pathState = PathState.SHOOT_PRELOADED;
         pathTimer = new Timer();
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
