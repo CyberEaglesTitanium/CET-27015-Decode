@@ -58,7 +58,7 @@ public class BlueBackwardsPedro2 extends OpMode {
                     //requested shots??
                     if (!shotsTriggered) {
                         shooter.fireShots(3);
-                        if (pathTimer.getElapsedTimeSeconds() > 10) {
+                        if (!shooter.isBusy()) {
                             shotsTriggered = true;
                         }
                     } else if (shotsTriggered && !follower.isBusy()) {
