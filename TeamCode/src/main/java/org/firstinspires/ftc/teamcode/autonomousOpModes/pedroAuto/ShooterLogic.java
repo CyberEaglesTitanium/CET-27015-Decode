@@ -30,17 +30,17 @@ public class ShooterLogic {
     private double FLICK_HAMMER_POS = -1;
     private double LOAD_LOAD_POS = 0;
 
-    private int BASE_INDEXER_POS = -178;
+    private int BASE_INDEXER_POS = 178;
 
-    private double FLICK_HAMMER_TIME = 1.2;
-    private double FLICK_START_TIME = 1.2;
-    private double LOAD_LOAD_TIME = 1.2;
-    private double LOAD_UNLOAD_TIME = 1.2;
+    private double FLICK_HAMMER_TIME = 0.6;
+    private double FLICK_START_TIME = 0.6;
+    private double LOAD_LOAD_TIME = 0.6;
+    private double LOAD_UNLOAD_TIME = 0.6;
 
     public int shotsRemaining = 0;
-    private int index = shotsRemaining;
+    private int index = 3;
 
-    private double TARGET_FLYWHEEL_POWER = 0.6;
+    private double TARGET_FLYWHEEL_POWER = 0.5;
 
     private double MAX_FLYWHEEL_TIME = 4;
 
@@ -50,6 +50,7 @@ public class ShooterLogic {
         loadServo = hwMap.get(Servo.class, "shootGate2");
         shootMotor = hwMap.get(DcMotorEx.class, "shootMotor");
 
+        spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shootMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -73,7 +74,7 @@ public class ShooterLogic {
                 }
                 break;
             case SPIN_UP:
-                if (stateTimer.seconds() > MAX_FLYWHEEL_TIME) {
+                if (shotsRemaining < 3 || stateTimer.seconds() > MAX_FLYWHEEL_TIME) {
                     loadServo.setPosition(LOAD_UNLOADED_POS);
                     flickServo.setPosition(FLICK_HAMMER_POS);
                     stateTimer.reset();
@@ -107,6 +108,7 @@ public class ShooterLogic {
                         flywheelState = FlywheelState.SPIN_UP;
                     } else {
                         shootMotor.setPower(0);
+                        index = 3;
                         flywheelState = FlywheelState.IDLE;
                     }
                 }
@@ -126,7 +128,7 @@ public class ShooterLogic {
 
     void spinUseLeft() {
         index -= 1;
-        spindexer.setTargetPosition(BASE_INDEXER_POS * index);
+        spindexer.setTargetPosition(BASE_INDEXER_POS * (3 - index));
         spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexer.setPower(0.3);
     }

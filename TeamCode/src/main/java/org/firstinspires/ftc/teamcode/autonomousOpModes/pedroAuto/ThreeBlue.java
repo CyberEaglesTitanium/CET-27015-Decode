@@ -1,8 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto;
 
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
-
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
@@ -14,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "Blue Auto from Goal, Pedro Edition", group = "Autonomous")
-public class BlueBackwardsPedro2 extends OpMode {
+public class ThreeBlue extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -58,10 +55,8 @@ public class BlueBackwardsPedro2 extends OpMode {
                     //requested shots??
                     if (!shotsTriggered) {
                         shooter.fireShots(3);
-                        if (!shooter.isBusy()) {
-                            shotsTriggered = true;
-                        }
-                    } else if (shotsTriggered && !follower.isBusy()) {
+                        shotsTriggered = true;
+                    } else if (!shooter.isBusy()) {
                         follower.followPath(shootToEnd, true);
                         setPathState(PathState.STRAFE_OUT);
                     }

@@ -64,6 +64,12 @@ import java.util.TimerTask;
         private LLResult llResult;
         private Pose3D botPose;
 
+        private SparkFunOTOS.Pose2D blueBotPos = new SparkFunOTOS.Pose2D(-63, 63, Math.toRadians(90));
+        private SparkFunOTOS.Pose2D redBotPos = new SparkFunOTOS.Pose2D(-63, -63, Math.toRadians(90));
+
+        private double baseLaunchPower;
+        private double launchSpeedMod;
+
         private Timer timer1;
         private TimerTask flick;
         // ^^ evil evil little pieces of-
