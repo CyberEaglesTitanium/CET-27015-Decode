@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto;
 import com.pedropathing.util.Timer;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.bylazar.configurables.annotations.Configurable;
@@ -15,6 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Disabled
 @Autonomous(name = "Backwards Spindexifier Pedro Edition Blue", group = "Autonomous")
 @Configurable // Panels
 public class BlueBackwardsAutoLaunchPedro extends OpMode {

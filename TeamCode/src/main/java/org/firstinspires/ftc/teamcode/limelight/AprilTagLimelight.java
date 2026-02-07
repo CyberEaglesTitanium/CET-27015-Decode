@@ -4,6 +4,7 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -22,6 +23,7 @@ the OpMode for checking for AprilTag ID 21.
 May not work correctly, depends on pipeline.
 --------------------------------------------
  */
+@Disabled
 @TeleOp(name = "AprilTagLimelightTestID21")
 public class AprilTagLimelight extends OpMode {
     private Limelight3A limelight;

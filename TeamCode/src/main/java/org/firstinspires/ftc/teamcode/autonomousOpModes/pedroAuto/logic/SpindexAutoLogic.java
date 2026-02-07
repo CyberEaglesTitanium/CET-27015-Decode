@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class ShooterLogic {
+public class SpindexAutoLogic {
     private DcMotorEx spindexer;
     private DcMotorEx shootMotor;
 
@@ -17,7 +17,7 @@ public class ShooterLogic {
 
     private enum FlywheelState {
         IDLE,
-        SPIN_UP,
+        EAT_ARTIFACTS,
         LOAD,
         LAUNCH,
         RESET
@@ -70,10 +70,10 @@ public class ShooterLogic {
                     shootMotor.setPower(TARGET_FLYWHEEL_POWER);
 
                     stateTimer.reset();
-                    flywheelState = FlywheelState.SPIN_UP;
+                    flywheelState = FlywheelState.EAT_ARTIFACTS;
                 }
                 break;
-            case SPIN_UP:
+            case EAT_ARTIFACTS:
                 if (shotsRemaining < 3 || stateTimer.seconds() > MAX_FLYWHEEL_TIME) {
                     loadServo.setPosition(LOAD_UNLOADED_POS);
                     flickServo.setPosition(FLICK_HAMMER_POS);
@@ -105,7 +105,7 @@ public class ShooterLogic {
                     if (shotsRemaining > 0) {
                         stateTimer.reset();
 
-                        flywheelState = FlywheelState.SPIN_UP;
+                        flywheelState = FlywheelState.EAT_ARTIFACTS;
                     } else {
                         shootMotor.setPower(0);
                         index = 3;

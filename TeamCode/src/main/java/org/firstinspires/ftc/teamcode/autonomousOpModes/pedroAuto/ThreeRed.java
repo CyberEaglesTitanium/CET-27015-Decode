@@ -11,8 +11,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Blue Auto", group = "Autonomous")
-public class ThreeBlue extends OpMode {
+@Autonomous(name = "Red Auto", group = "Autonomous")
+public class ThreeRed extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -28,9 +28,9 @@ public class ThreeBlue extends OpMode {
 
     private PathState pathState;
 
-    private final Pose startPose = new Pose(24, 120, Math.toRadians(135));
-    private final Pose shootPose = new Pose(48, 96, Math.toRadians(135));
-    private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
+    private final Pose startPose = new Pose(120, 120, Math.toRadians(45));
+    private final Pose shootPose = new Pose(96, 96, Math.toRadians(45));
+    private final Pose endPose = new Pose(100, 75, Math.toRadians(45));
 
     private PathChain startToShoot, shootToEnd;
 

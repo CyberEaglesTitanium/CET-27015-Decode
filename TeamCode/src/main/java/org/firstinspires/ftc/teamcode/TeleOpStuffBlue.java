@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -39,6 +40,7 @@ import java.util.TimerTask;
 
         private DcMotorEx intakeMotor;
         private DcMotorEx shootMotor;
+        private DcMotorEx shootMotor2;
         private DcMotorEx spindexifier;
 
 //        private DigitalChannel limitationImitation;
@@ -155,6 +157,7 @@ import java.util.TimerTask;
 
         void shootStart() {
             shootMotor.setPower(1);
+            shootMotor2.setPower(-1);
             intakeMotor.setPower(0);
         }
         void shootStop() {
@@ -190,6 +193,7 @@ import java.util.TimerTask;
         void emergencyStop() {
             spindexifier.setPower(0);
             shootMotor.setPower(0);
+            shootMotor2.setPower(0);
             shootGate1.setPosition(0.5);
         }
 
@@ -266,6 +270,7 @@ import java.util.TimerTask;
 
             intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
             shootMotor = hardwareMap.get(DcMotorEx.class, "shootMotor");
+            shootMotor2 = hardwareMap.get(DcMotorEx.class, "shootMotor2");
             spindexifier = hardwareMap.get(DcMotorEx.class, "spindexifier");
 
             colSenseDeluxe = hardwareMap.get(ColorSensor.class, "colsense");
@@ -306,7 +311,7 @@ import java.util.TimerTask;
             spindexifier.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // Variables
 
-            currentShootPower = 0.6;
+            currentShootPower = 0.3;
 
             double TICKS_PER_REV = 145.1;
             double TICKS_PER_REV_SHOOTER = (shootMotor.getVelocity() / 28) * 60;
@@ -334,6 +339,8 @@ import java.util.TimerTask;
             // Put initialization blocks here.
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
+//            shootMotor.setDirection(DcMotor.Direction.REVERSE);
+            shootMotor2.setDirection(DcMotor.Direction.REVERSE);
 //            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 //            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -465,8 +472,10 @@ import java.util.TimerTask;
 
                 if (shooterIsOn) {
                     shootMotor.setPower(currentShootPower);
+                    shootMotor2.setPower(currentShootPower);
                 } else {
                     shootMotor.setPower(0);
+                    shootMotor2.setPower(0);
                 }
 
                 if (gamepad2.right_trigger > 0.5) {

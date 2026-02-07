@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "6-Ball Blue", group = "Autonomous")
@@ -80,6 +81,7 @@ public class SixShooterBlue extends OpMode {
                         shooter.fireShots(3);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
+                        spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                         follower.followPath(shootToIntake, true);
                         setPathState(PathState.INTAKE_TO_PICKUP);
                     }
@@ -89,10 +91,10 @@ public class SixShooterBlue extends OpMode {
                 if (!follower.isBusy()) {
                     intakeMotor.setPower(1);
                     if (pathTimer.getElapsedTimeSeconds() > 1) {
-                        follower.followPath(intakeToPickup);
-                        spindexer.setTargetPosition(spindexer.getCurrentPosition() + 538);
+                        follower.followPath(intakeToPickup, 0.35, true);
+                        spindexer.setTargetPosition(spindexer.getCurrentPosition() + (536 * 3));
                         spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        spindexer.setPower(0.5);
+                        spindexer.setPower(0.3);
                         setPathState(PathState.PICKUP_TO_SHOOT);
                     }
                 }
@@ -158,6 +160,8 @@ public class SixShooterBlue extends OpMode {
         shooter.update();
         statePathUpdatifier();
 
+        telemetry.addData("Spindexer! Position", spindexer.getCurrentPosition());
+        telemetry.addData("Spindexer! Target", spindexer.getTargetPosition());
         telemetry.addData("Current Path State of Doom", pathState.toString());
         telemetry.addData("Robo-X (position that is)", follower.getPose().getX());
         telemetry.addData("Robo-Y (position that is)", follower.getPose().getY());
