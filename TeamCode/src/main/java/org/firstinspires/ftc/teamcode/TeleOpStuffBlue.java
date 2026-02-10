@@ -340,7 +340,7 @@ import java.util.TimerTask;
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
             backLeft.setDirection(DcMotor.Direction.REVERSE);
 //            shootMotor.setDirection(DcMotor.Direction.REVERSE);
-            shootMotor2.setDirection(DcMotor.Direction.REVERSE);
+//            shootMotor2.setDirection(DcMotor.Direction.REVERSE);
 //            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
 //            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
 
