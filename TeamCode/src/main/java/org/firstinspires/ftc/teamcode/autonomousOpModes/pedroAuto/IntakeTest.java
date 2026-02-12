@@ -12,19 +12,20 @@ import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterL
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.SpindexAutoLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Launch Test", group = "Autonomous")
-public class LaunchTest extends OpMode {
+@Autonomous(name = "Intake Test", group = "Autonomous")
+public class IntakeTest extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
     private SpindexAutoLogic spindex = new SpindexAutoLogic();
     private ShooterLogic shooter = new ShooterLogic();
 
-    private boolean shotsTriggered = false;
+    private boolean artifactsToEat = false;
 
     public enum PathState {
+        DRIVE_TO_INTAKE_1,
         DRIVE_FROM_GOAL,
-        SHOOT_PRELOADED,
+        INTAKE_1,
         STRAFE_OUT
     }
 
@@ -32,19 +33,24 @@ public class LaunchTest extends OpMode {
 
     private final Pose startPose = new Pose(24, 120, Math.toRadians(135));
     private final Pose shootPose = new Pose(48, 96, Math.toRadians(135));
-    private final Pose intake3Pose = new Pose(24, 84, 180);
+    private final Pose intake1endPose = new Pose(24, 84, 180);
+    private final Pose intake1startPose = new Pose(48, 84, 180);
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
-    private PathChain startToShoot, shootToEnd, intake3ToShoot;
+    private PathChain startToShoot, shootToEnd, intake1ToShoot, shootToIntake1;
 
     public void buildPaths() {
         startToShoot = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), shootPose.getHeading())
                 .build();
-        intake3ToShoot = follower.pathBuilder()
-                .addPath(new BezierLine(intake3Pose, shootPose))
-                .setLinearHeadingInterpolation(intake3Pose.getHeading(), shootPose.getHeading())
+        intake1ToShoot = follower.pathBuilder()
+                .addPath(new BezierLine(intake1endPose, shootPose))
+                .setLinearHeadingInterpolation(intake1endPose.getHeading(), shootPose.getHeading())
+                .build();
+        shootToIntake1 = follower.pathBuilder()
+                .addPath(new BezierLine(shootPose, intake1startPose))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), intake1startPose.getHeading())
                 .build();
         shootToEnd = follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, endPose))
@@ -56,22 +62,29 @@ public class LaunchTest extends OpMode {
         switch (pathState) {
             case DRIVE_FROM_GOAL:
                 follower.followPath(startToShoot, true);
-                setPathState(PathState.SHOOT_PRELOADED);
+                setPathState(PathState.DRIVE_TO_INTAKE_1);
                 break;
-            case SHOOT_PRELOADED:
+            case DRIVE_TO_INTAKE_1:
+                if (!follower.isBusy()) {
+                    follower.followPath(shootToIntake1);
+                    setPathState(PathState.INTAKE_1);
+                }
+                break;
+            case INTAKE_1:
                 if (!follower.isBusy()) {
                     //requested shots??
-                    if (!shotsTriggered) {
+                    if (!artifactsToEat) {
                         spindex.intakeBalls(3);
-                        shotsTriggered = true;
+                        artifactsToEat = true;
                     } else if (!spindex.isBusy()) {
-                        follower.followPath(intake3ToShoot, true);
+                        follower.followPath(intake1ToShoot, true);
                         setPathState(PathState.STRAFE_OUT);
                     }
                 }
                 break;
             case STRAFE_OUT:
                 if (!follower.isBusy()) {
+                    follower.followPath(shootToEnd);
                     telemetry.addLine("Done all paths");
                 }
                 break;
@@ -84,7 +97,7 @@ public class LaunchTest extends OpMode {
     public void setPathState(PathState newState) {
         pathState = newState;
         pathTimer.resetTimer();
-        shotsTriggered = false;
+        artifactsToEat = false;
 
     }
 
@@ -94,6 +107,7 @@ public class LaunchTest extends OpMode {
         opModeTimer = new Timer();
         follower = Constants.createFollower(hardwareMap);
         shooter.init(hardwareMap);
+        spindex.init(hardwareMap);
         buildPaths();
         follower.setPose(startPose);
     }
@@ -106,6 +120,7 @@ public class LaunchTest extends OpMode {
     public void loop() {
         follower.update();
         shooter.update();
+        spindex.update();
         statePathUpdatifier();
 
         telemetry.addData("Current Path State of Doom", pathState.toString());

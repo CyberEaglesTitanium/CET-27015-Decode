@@ -24,7 +24,7 @@ public class SpindexAutoLogic {
 
     private ElapsedTime stateTimer = new ElapsedTime();
 
-    private enum FlywheelState {
+    private enum IntakeState {
         IDLE,
         EAT_ARTIFACTS,
         EAT_ARTIFACTS_II,
@@ -41,21 +41,19 @@ public class SpindexAutoLogic {
 
     private PathChain startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 
-    private FlywheelState flywheelState;
+    private IntakeState intakeState;
 
     private double FLICK_STARTER_POS = 0.5;
     private double LOAD_UNLOADED_POS = 1;
+    private double FLICK_HAMMER_POS = -1;
+    private double LOAD_LOAD_POS = 0;
 
     private int BASE_INDEXER_POS = 178;
 
-    private double PATH_TIME = 1;
+    private double PATH_TIME = 0.5;
 
     public int amountToIntake = 0;
-    private int index = 3;
-
-    private double TARGET_FLYWHEEL_POWER = 0.5;
-
-    private double MAX_FLYWHEEL_TIME = 4;
+    private int index = 3; // check if it resets every time
 
     public void buildPaths() {
         startToIntake1 = follower.pathBuilder()
@@ -80,74 +78,82 @@ public class SpindexAutoLogic {
         spindexer = hwMap.get(DcMotorEx.class, "spindexifier");
         flickServo = hwMap.get(Servo.class, "shootGate1");
         loadServo = hwMap.get(Servo.class, "shootGate2");
-        shootMotor = hwMap.get(DcMotorEx.class, "shootMotor");
         intakeMotor = hwMap.get(DcMotorEx.class, "intakeMotor");
 
         spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        shootMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        flywheelState = FlywheelState.IDLE;
+        intakeState = IntakeState.IDLE;
 
-        shootMotor.setPower(0);
+        intakeMotor.setPower(0);
         flickServo.setPosition(FLICK_STARTER_POS);
         loadServo.setPosition(LOAD_UNLOADED_POS);
     }
 
     public void update() {
-        switch (flywheelState) {
+        switch (intakeState) {
             case IDLE:
                 if (amountToIntake > 0) {
                     intakeMotor.setPower(1);
+                    loadServo.setPosition(LOAD_UNLOADED_POS);
                     stateTimer.reset();
-                    flywheelState = FlywheelState.EAT_ARTIFACTS;
+                    intakeState = IntakeState.EAT_ARTIFACTS;
                 }
                 break;
             case EAT_ARTIFACTS:
-                if (stateTimer.seconds() >= 2 && !follower.isBusy()) {
+                if (stateTimer.seconds() >= 0.5 && !follower.isBusy()) {
                     follower.followPath(startToIntake1);
                     if (!follower.isBusy()) {
                         spinUseLeft();
-                        flywheelState = FlywheelState.EAT_ARTIFACTS_II;
+                        amountToIntake -= 1;
+                        stateTimer.reset();
+                        intakeState = IntakeState.EAT_ARTIFACTS_II;
                     }
                 }
                 break;
             case EAT_ARTIFACTS_II:
-                if (!follower.isBusy() && stateTimer.seconds() >= 4) {
+                if (!follower.isBusy() && stateTimer.seconds() >= 0.5) {
                     follower.followPath(intake1toIntake2);
                     if (!follower.isBusy()) {
                         spinUseLeft();
-                        flywheelState = FlywheelState.EAT_ARTIFACTS_III;
+                        if (stateTimer.seconds() >= 1.5) {
+                            flickServo.setPosition(FLICK_HAMMER_POS);
+                        }
+                        amountToIntake -= 1;
+                        stateTimer.reset();
+                        intakeState = IntakeState.EAT_ARTIFACTS_III;
                     }
                 }
                 break;
             case EAT_ARTIFACTS_III:
-                if (!follower.isBusy() && stateTimer.seconds() >= 6) {
+                if (!follower.isBusy() && stateTimer.seconds() >= 0.5) {
+                    flickServo.setPosition(FLICK_STARTER_POS);
                     follower.followPath(intake2toIntake3);
                     if (!follower.isBusy()) {
                         spinUseLeft();
-                        flywheelState = FlywheelState.RESET;
+                        stateTimer.reset();
+                        intakeState = IntakeState.RESET;
                     }
                 }
                 break;
             case RESET:
                 if (stateTimer.seconds() > PATH_TIME) {
                         intakeMotor.setPower(0);
-                        amountToIntake = 0;
-                        flywheelState = FlywheelState.IDLE;
+                        amountToIntake -= 1;
+                        intakeState = IntakeState.IDLE;
                 }
                 break;
         }
     }
 
-    public void intakeBalls(int numberOfShots) {
-        if (flywheelState == FlywheelState.IDLE) {
-            amountToIntake = numberOfShots;
+    public void intakeBalls(int numberOfArtifacts) {
+        if (intakeState == IntakeState.IDLE) {
+            amountToIntake = numberOfArtifacts;
         }
     }
 
     public boolean isBusy() {
-        return flywheelState != FlywheelState.IDLE;
+        return intakeState != IntakeState.IDLE;
     }
 
     void spinUseLeft() {
