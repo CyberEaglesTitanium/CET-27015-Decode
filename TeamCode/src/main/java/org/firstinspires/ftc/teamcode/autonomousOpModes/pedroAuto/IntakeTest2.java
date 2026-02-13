@@ -25,7 +25,7 @@ public class IntakeTest2 extends OpMode {
     private int index = 3;
 
     private DcMotorEx spindexer;
-    private int BASE_INDEXER_POS = 178;
+    private int BASE_INDEXER_POS = 179;
 
     private DcMotorEx shootMotor;
     private DcMotorEx intakeMotor;
@@ -60,10 +60,10 @@ public class IntakeTest2 extends OpMode {
     private final Pose startPose = new Pose(24, 120, Math.toRadians(135));
     private final Pose shootPose = new Pose(48, 96, Math.toRadians(135));
     private final Pose intakeStart = new Pose(48, 84, Math.toRadians(180));
-    private final Pose intakePosition1 = new Pose(36, 84, Math.toRadians(180));
-    private final Pose intakePosition2 = new Pose(30, 84, Math.toRadians(180));
-    private final Pose intakePosition3 = new Pose(24, 84, Math.toRadians(180));
-    private final Pose intake1endPose = new Pose(24, 84, Math.toRadians(180));
+    private final Pose intakePosition1 = new Pose(40, 84, Math.toRadians(180));
+    private final Pose intakePosition2 = new Pose(35, 84, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(30, 84, Math.toRadians(180));
+    private final Pose intake1endPose = new Pose(30, 84, Math.toRadians(180));
     private final Pose intake1startPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
@@ -113,7 +113,7 @@ public class IntakeTest2 extends OpMode {
             case DRIVE_TO_INTAKE:
                 if (!follower.isBusy()) {
                     follower.followPath(shootToIntake1);
-                    setPathState(PathState.INTAKE_1);
+                    setPathState(PathState.INTAKE_ON);
                 }
                 break;
             case INTAKE_ON:
@@ -131,12 +131,12 @@ public class IntakeTest2 extends OpMode {
             case INDEX_1:
                 if (!follower.isBusy()) {
                     spinUseLeft();
-                    stateTimer.reset();
+                    pathTimer.resetTimer();
                     setPathState(PathState.DRIVE_TO_INTAKE_2);
                 }
                 break;
             case DRIVE_TO_INTAKE_2:
-                if (!follower.isBusy() || stateTimer.seconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 5) {
                     follower.followPath(intake1toIntake2);
                     setPathState(PathState.INDEX_2);
                 }
@@ -144,17 +144,17 @@ public class IntakeTest2 extends OpMode {
             case INDEX_2:
                 if (!follower.isBusy()) {
                     spinUseLeft();
-                    stateTimer.reset();
-                    flickServo.setPosition(-1);
-                    if (stateTimer.seconds() > 1) {
-                        flickServo.setPosition(0.5);
-                        stateTimer.reset();
+                    pathTimer.resetTimer();
+//                    flickServo.setPosition(-1);
+//                    if (pathTimer.getElapsedTimeSeconds() > 5) {
+//                        flickServo.setPosition(0.5);
+//                        pathTimer.resetTimer();
                         setPathState(PathState.DRIVE_TO_INTAKE_3);
-                    }
+//                    }
                 }
                 break;
             case DRIVE_TO_INTAKE_3:
-                if (!follower.isBusy() || stateTimer.seconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 5) {
                     follower.followPath(intake2toIntake3);
                     setPathState(PathState.INDEX_3);
                 }
@@ -163,13 +163,13 @@ public class IntakeTest2 extends OpMode {
                 if (!follower.isBusy()) {
                     spinUseLeft();
                     intakeMotor.setPower(0);
-                    stateTimer.reset();
+                    pathTimer.resetTimer();
                     index = 3;
                     setPathState(PathState.DRIVE_TO_GOAL_1);
                 }
                 break;
             case DRIVE_TO_GOAL_1:
-                if (!follower.isBusy() || stateTimer.seconds() > 1) {
+                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 5) {
                     follower.followPath(intake3toShootPos);
                     setPathState(PathState.STRAFE_OUT);
                 }
@@ -203,6 +203,7 @@ public class IntakeTest2 extends OpMode {
         shooter.init(hardwareMap);
         spindex.init(hardwareMap);
         intakeMotor = hardwareMap.get(DcMotorEx.class, "intakeMotor");
+        spindexer = hardwareMap.get(DcMotorEx.class, "spindexifier");
         flickServo = hardwareMap.get(Servo.class, "shootGate1");
         loadServo = hardwareMap.get(Servo.class, "shootGate2");
         buildPaths();
