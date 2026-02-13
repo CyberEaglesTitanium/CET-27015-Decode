@@ -62,8 +62,8 @@ public class IntakeTest2 extends OpMode {
     private final Pose intakeStart = new Pose(48, 84, Math.toRadians(180));
     private final Pose intakePosition1 = new Pose(40, 84, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(35, 84, Math.toRadians(180));
-    private final Pose intakePosition3 = new Pose(30, 84, Math.toRadians(180));
-    private final Pose intake1endPose = new Pose(30, 84, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(28, 84, Math.toRadians(180));
+    private final Pose intake1endPose = new Pose(28, 84, Math.toRadians(180));
     private final Pose intake1startPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
@@ -136,7 +136,7 @@ public class IntakeTest2 extends OpMode {
                 }
                 break;
             case DRIVE_TO_INTAKE_2:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 5) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(intake1toIntake2);
                     setPathState(PathState.INDEX_2);
                 }
@@ -154,7 +154,7 @@ public class IntakeTest2 extends OpMode {
                 }
                 break;
             case DRIVE_TO_INTAKE_3:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 5) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(intake2toIntake3);
                     setPathState(PathState.INDEX_3);
                 }
@@ -169,14 +169,15 @@ public class IntakeTest2 extends OpMode {
                 }
                 break;
             case DRIVE_TO_GOAL_1:
-                if (!follower.isBusy() || pathTimer.getElapsedTimeSeconds() > 5) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(intake3toShootPos);
                     setPathState(PathState.STRAFE_OUT);
+
                 }
                 break;
             case STRAFE_OUT:
                 if (!follower.isBusy()) {
-                    follower.followPath(shootToEnd);
+                    follower.followPath(shootToEnd, true);
                     if (!follower.isBusy()) {
                         telemetry.addLine("Done all paths");
                     }
