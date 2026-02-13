@@ -10,6 +10,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
+
 public class SpindexAutoLogic {
     private Follower follower;
 
@@ -33,11 +35,11 @@ public class SpindexAutoLogic {
         RESET
     }
 
-    private final Pose intakeStart = new Pose(48, 84, 180);
-    private final Pose intakePosition1 = new Pose(36, 84, 180);
-    private final Pose intakePosition2 = new Pose(30, 84, 180);
-    private final Pose intakePosition3 = new Pose(24, 84, 180);
-    private final Pose shootPos = new Pose(48, 96, 135);
+    private final Pose intakeStart = new Pose(48, 84, Math.toRadians(180));
+    private final Pose intakePosition1 = new Pose(36, 84, Math.toRadians(180));
+    private final Pose intakePosition2 = new Pose(30, 84, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(24, 84, Math.toRadians(180));
+    private final Pose shootPos = new Pose(48, 96, Math.toRadians(135));
 
     private PathChain startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 
@@ -80,14 +82,17 @@ public class SpindexAutoLogic {
         loadServo = hwMap.get(Servo.class, "shootGate2");
         intakeMotor = hwMap.get(DcMotorEx.class, "intakeMotor");
 
+        follower = Constants.createFollower(hwMap);
+
         spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        intakeState = IntakeState.IDLE;
 
         intakeMotor.setPower(0);
         flickServo.setPosition(FLICK_STARTER_POS);
         loadServo.setPosition(LOAD_UNLOADED_POS);
+
+        buildPaths();
+        intakeState = IntakeState.IDLE;
     }
 
     public void update() {
@@ -98,6 +103,7 @@ public class SpindexAutoLogic {
                     loadServo.setPosition(LOAD_UNLOADED_POS);
                     stateTimer.reset();
                     intakeState = IntakeState.EAT_ARTIFACTS;
+
                 }
                 break;
             case EAT_ARTIFACTS:
@@ -154,6 +160,10 @@ public class SpindexAutoLogic {
 
     public boolean isBusy() {
         return intakeState != IntakeState.IDLE;
+    }
+
+    public void loop() {
+        follower.update();
     }
 
     void spinUseLeft() {

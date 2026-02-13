@@ -33,8 +33,8 @@ public class IntakeTest extends OpMode {
 
     private final Pose startPose = new Pose(24, 120, Math.toRadians(135));
     private final Pose shootPose = new Pose(48, 96, Math.toRadians(135));
-    private final Pose intake1endPose = new Pose(24, 84, 180);
-    private final Pose intake1startPose = new Pose(48, 84, 180);
+    private final Pose intake1endPose = new Pose(24, 84, Math.toRadians(180));
+    private final Pose intake1startPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
     private PathChain startToShoot, shootToEnd, intake1ToShoot, shootToIntake1;
