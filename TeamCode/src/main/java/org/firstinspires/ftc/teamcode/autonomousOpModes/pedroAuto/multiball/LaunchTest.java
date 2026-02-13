@@ -62,13 +62,13 @@ public class LaunchTest extends OpMode {
 
     private PathState pathState;
 
-    private final Pose startPose = new Pose(24, 120, Math.toRadians(135));
+    private final Pose startPose = new Pose(20, 120, Math.toRadians(135));
     private final Pose shootPose = new Pose(48, 96, Math.toRadians(135));
-    private final Pose intakeStart = new Pose(48, 84, Math.toRadians(180));
-    private final Pose intakePosition1 = new Pose(40, 84, Math.toRadians(180));
-    private final Pose intakePosition2 = new Pose(35, 84, Math.toRadians(180));
-    private final Pose intakePosition3 = new Pose(28, 84, Math.toRadians(180));
-    private final Pose intake1startPose = new Pose(48, 84, Math.toRadians(180));
+    private final Pose intakeStart = new Pose(48, 83, Math.toRadians(180));
+    private final Pose intakePosition1 = new Pose(35, 83, Math.toRadians(180));
+    private final Pose intakePosition2 = new Pose(29, 83, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(20, 83, Math.toRadians(180));
+    private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
@@ -114,7 +114,7 @@ public class LaunchTest extends OpMode {
                 if (!follower.isBusy()) {
                     //requested shots??
                     if (!shotsTriggered) {
-                        shooter.fireShots(3);
+                        shooter.fireShots(3,3);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
                         setPathState(PathState.DRIVE_TO_INTAKE);
@@ -124,6 +124,8 @@ public class LaunchTest extends OpMode {
             case DRIVE_TO_INTAKE:
                 if (!follower.isBusy()) {
                     follower.followPath(shootToIntake1);
+                    spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     setPathState(PathState.INTAKE_ON);
                 }
                 break;
@@ -181,6 +183,9 @@ public class LaunchTest extends OpMode {
                 break;
             case DRIVE_TO_GOAL_1:
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
+                    shotsTriggered = false;
+                    spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                    spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     follower.followPath(intake3toShootPos);
                     setPathState(PathState.SHOOT_PRELOADED_2);
 //                    if (!follower.isBusy()) {
@@ -193,7 +198,7 @@ public class LaunchTest extends OpMode {
                 if (!follower.isBusy()) {
                     //requested shots??
                     if (!shotsTriggered) {
-                        shooter.fireShots(3);
+                        shooter.fireShots(3, 3);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
                         follower.followPath(shootToEnd, true);

@@ -56,7 +56,7 @@ public class QThreeBlue extends OpMode {
                 if (!follower.isBusy()) {
                     //requested shots??
                     if (!shotsTriggered) {
-                        shooter.fireShots(3);
+                        shooter.fireShots(3, 3);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
                         follower.followPath(shootToEnd, true);

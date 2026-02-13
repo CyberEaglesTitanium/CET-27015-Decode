@@ -141,9 +141,10 @@ public class ShooterLogicQuickdraw {
         }
     }
 
-    public void fireShots(int numberOfShots) {
+    public void fireShots(int numberOfShots, int indexAgain) {
         if (flywheelState == FlywheelState.IDLE) {
             shotsRemaining = numberOfShots;
+            index = indexAgain;
         }
     }
 
