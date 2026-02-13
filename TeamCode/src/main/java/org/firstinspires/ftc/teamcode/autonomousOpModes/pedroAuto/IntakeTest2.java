@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterL
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.SpindexAutoLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "Intake Test", group = "Autonomous")
-public class IntakeTest extends OpMode {
+@Autonomous(name = "Intake Test II", group = "Autonomous")
+public class IntakeTest2 extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
