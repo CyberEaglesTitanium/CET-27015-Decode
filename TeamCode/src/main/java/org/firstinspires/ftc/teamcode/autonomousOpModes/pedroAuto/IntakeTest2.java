@@ -39,6 +39,7 @@ public class IntakeTest2 extends OpMode {
     private ShooterLogic shooter = new ShooterLogic();
 
     private boolean artifactsToEat = false;
+    private boolean stateMachinePleaseShush = false;
 
     public enum PathState {
         DRIVE_FROM_GOAL,
@@ -52,7 +53,8 @@ public class IntakeTest2 extends OpMode {
         INDEX_3,
         DRIVE_TO_GOAL_1,
         INTAKE_1,
-        STRAFE_OUT
+        STRAFE_OUT,
+        STOP_THE_BOT
     }
 
     private PathState pathState;
@@ -171,15 +173,19 @@ public class IntakeTest2 extends OpMode {
             case DRIVE_TO_GOAL_1:
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(intake3toShootPos);
-                    setPathState(PathState.STRAFE_OUT);
-
+//                    setPathState(PathState.STRAFE_OUT);
+                    if (!follower.isBusy()) {
+                        follower.followPath(shootToEnd, true);
+                        setPathState(PathState.STRAFE_OUT);
+                    }
                 }
                 break;
             case STRAFE_OUT:
                 if (!follower.isBusy()) {
-                    follower.followPath(shootToEnd, true);
-                    if (!follower.isBusy()) {
+                    if (stateMachinePleaseShush) {
+                        follower.followPath(shootToEnd, true);
                         telemetry.addLine("Done all paths");
+                        stateMachinePleaseShush = false;
                     }
                 }
                 break;
