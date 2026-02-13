@@ -12,7 +12,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.ThreeBlue;
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogic;
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogicQuickdraw;
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.SpindexAutoLogic;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
@@ -35,13 +37,15 @@ public class LaunchTest extends OpMode {
     private ElapsedTime stateTimer = new ElapsedTime();
 
     private SpindexAutoLogic spindex = new SpindexAutoLogic();
-    private ShooterLogic shooter = new ShooterLogic();
+    private ShooterLogicQuickdraw shooter = new ShooterLogicQuickdraw();
 
     private boolean artifactsToEat = false;
+    private boolean shotsTriggered = false;
     private boolean stateMachinePleaseShush = true;
 
     public enum PathState {
         DRIVE_FROM_GOAL,
+        SHOOT_PRELOADED,
         DRIVE_TO_INTAKE,
         INTAKE_ON,
         DRIVE_TO_INTAKE_1,
@@ -51,9 +55,9 @@ public class LaunchTest extends OpMode {
         DRIVE_TO_INTAKE_3,
         INDEX_3,
         DRIVE_TO_GOAL_1,
+        SHOOT_PRELOADED_2,
         INTAKE_1,
-        STRAFE_OUT,
-        STOP_THE_BOT
+        STRAFE_OUT
     }
 
     private PathState pathState;
@@ -104,7 +108,18 @@ public class LaunchTest extends OpMode {
         switch (pathState) {
             case DRIVE_FROM_GOAL:
                 follower.followPath(startToShoot, true);
-                setPathState(PathState.DRIVE_TO_INTAKE);
+                setPathState(PathState.SHOOT_PRELOADED);
+                break;
+            case SHOOT_PRELOADED:
+                if (!follower.isBusy()) {
+                    //requested shots??
+                    if (!shotsTriggered) {
+                        shooter.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (!shooter.isBusy()) {
+                        setPathState(PathState.DRIVE_TO_INTAKE);
+                    }
+                }
                 break;
             case DRIVE_TO_INTAKE:
                 if (!follower.isBusy()) {
@@ -167,11 +182,23 @@ public class LaunchTest extends OpMode {
             case DRIVE_TO_GOAL_1:
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(intake3toShootPos);
-                    setPathState(PathState.STRAFE_OUT);
+                    setPathState(PathState.SHOOT_PRELOADED_2);
 //                    if (!follower.isBusy()) {
 //                        follower.followPath(shootToEnd, true);
 //                        setPathState(PathState.STRAFE_OUT);
 //                    }
+                }
+                break;
+            case SHOOT_PRELOADED_2:
+                if (!follower.isBusy()) {
+                    //requested shots??
+                    if (!shotsTriggered) {
+                        shooter.fireShots(3);
+                        shotsTriggered = true;
+                    } else if (!shooter.isBusy()) {
+                        follower.followPath(shootToEnd, true);
+                        setPathState(PathState.STRAFE_OUT);
+                    }
                 }
                 break;
             case STRAFE_OUT:
