@@ -43,7 +43,7 @@ public class ShooterLogicQuickdraw {
 
     private double TARGET_FLYWHEEL_POWER = 0.5;
 
-    private double MAX_FLYWHEEL_TIME = 4;
+    private double MAX_FLYWHEEL_TIME = 2;
 
     public void init (HardwareMap hwMap) {
         spindexer = hwMap.get(DcMotorEx.class, "spindexifier");
@@ -79,14 +79,16 @@ public class ShooterLogicQuickdraw {
                 }
                 break;
             case SPIN_UP:
-                if (shotsRemaining == 3 || stateTimer.seconds() > MAX_FLYWHEEL_TIME) {
-                    loadServo.setPosition(LOAD_UNLOADED_POS);
+                if (shotsRemaining == 3 && stateTimer.seconds() > MAX_FLYWHEEL_TIME) {
+                    loadServo.setPosition(LOAD_LOAD_POS);
                     stateTimer.reset();
 
                     flywheelState = FlywheelState.LOAD;
                 } else if (shotsRemaining <= 2) {
-                    loadServo.setPosition(LOAD_UNLOADED_POS);
-                    flickServo.setPosition(FLICK_HAMMER_POS);
+                    loadServo.setPosition(LOAD_LOAD_POS);
+//                    if (stateTimer.seconds() > FLICK_HAMMER_TIME) {
+//                        flickServo.setPosition(FLICK_HAMMER_POS);
+//                    }
                     stateTimer.reset();
 
                     flywheelState = FlywheelState.LOAD;
@@ -94,19 +96,24 @@ public class ShooterLogicQuickdraw {
                 break;
             case LOAD:
                 if (stateTimer.seconds() > FLICK_HAMMER_TIME) {
-                    flickServo.setPosition(FLICK_STARTER_POS);
-                    loadServo.setPosition(LOAD_LOAD_POS);
+                    loadServo.setPosition(LOAD_UNLOADED_POS);
+                    if (stateTimer.seconds() > 1) {
+                        flickServo.setPosition(FLICK_HAMMER_POS);
+                    }
                     stateTimer.reset();
                     flywheelState = FlywheelState.LAUNCH;
                 }
                 break;
             case LAUNCH:
                 if (stateTimer.seconds() > LOAD_LOAD_TIME) {
+                    flickServo.setPosition(FLICK_STARTER_POS);
+                    if (shotsRemaining == 1) {
+                        spinUseLeft();
+                        stateTimer.reset();
+                    } else {
+                        stateTimer.reset();
+                    }
                     shotsRemaining--;
-                    loadServo.setPosition(LOAD_UNLOADED_POS);
-                    spinUseLeft();
-                    stateTimer.reset();
-
                     flywheelState = FlywheelState.RESET;
                 }
                 break;
