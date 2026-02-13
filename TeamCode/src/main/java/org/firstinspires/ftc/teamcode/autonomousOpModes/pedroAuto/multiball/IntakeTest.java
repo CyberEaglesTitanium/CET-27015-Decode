@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.multiball;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.multiball;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -39,7 +38,7 @@ public class IntakeTest2 extends OpMode {
     private ShooterLogic shooter = new ShooterLogic();
 
     private boolean artifactsToEat = false;
-    private boolean stateMachinePleaseShush = false;
+    private boolean stateMachinePleaseShush = true;
 
     public enum PathState {
         DRIVE_FROM_GOAL,
@@ -65,20 +64,15 @@ public class IntakeTest2 extends OpMode {
     private final Pose intakePosition1 = new Pose(40, 84, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(35, 84, Math.toRadians(180));
     private final Pose intakePosition3 = new Pose(28, 84, Math.toRadians(180));
-    private final Pose intake1endPose = new Pose(28, 84, Math.toRadians(180));
     private final Pose intake1startPose = new Pose(48, 84, Math.toRadians(180));
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
-    private PathChain startToShoot, shootToEnd, intake1ToShoot, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
+    private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 
     public void buildPaths() {
         startToShoot = follower.pathBuilder()
                 .addPath(new BezierLine(startPose, shootPose))
                 .setLinearHeadingInterpolation(startPose.getHeading(), shootPose.getHeading())
-                .build();
-        intake1ToShoot = follower.pathBuilder()
-                .addPath(new BezierLine(intake1endPose, shootPose))
-                .setLinearHeadingInterpolation(intake1endPose.getHeading(), shootPose.getHeading())
                 .build();
         startToIntake1 = follower.pathBuilder()
                 .addPath(new BezierLine(intakeStart, intakePosition1))
@@ -173,11 +167,11 @@ public class IntakeTest2 extends OpMode {
             case DRIVE_TO_GOAL_1:
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 2) {
                     follower.followPath(intake3toShootPos);
-//                    setPathState(PathState.STRAFE_OUT);
-                    if (!follower.isBusy()) {
-                        follower.followPath(shootToEnd, true);
-                        setPathState(PathState.STRAFE_OUT);
-                    }
+                    setPathState(PathState.STRAFE_OUT);
+//                    if (!follower.isBusy()) {
+//                        follower.followPath(shootToEnd, true);
+//                        setPathState(PathState.STRAFE_OUT);
+//                    }
                 }
                 break;
             case STRAFE_OUT:
