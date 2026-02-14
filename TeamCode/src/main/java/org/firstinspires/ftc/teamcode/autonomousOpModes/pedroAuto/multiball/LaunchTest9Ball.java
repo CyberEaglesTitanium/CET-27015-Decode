@@ -12,7 +12,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogicQuickdraw;
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdraw;
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdraw9Ball;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "9-Ball Test (Blue)", group = "Autonomous")
@@ -20,7 +21,7 @@ public class LaunchTest9Ball extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
-    private int index = 4;
+    private int index = 8;
 
     private DcMotorEx spindexer;
     private int BASE_INDEXER_POS = 178;
@@ -33,7 +34,7 @@ public class LaunchTest9Ball extends OpMode {
 
     private ElapsedTime stateTimer = new ElapsedTime();
 
-    private ShooterLogicQuickdraw shooter = new ShooterLogicQuickdraw();
+    private ShooterLogicQuickdraw9Ball shooter = new ShooterLogicQuickdraw9Ball();
 
     private boolean artifactsToEat = false;
     private boolean shotsTriggered = false;
@@ -52,6 +53,16 @@ public class LaunchTest9Ball extends OpMode {
         INDEX_3,
         DRIVE_TO_GOAL_1,
         SHOOT_PRELOADED_2,
+        DRIVE_TO_OTHER_INTAKE,
+        INTAKE_ON_2,
+        DRIVE_TO_INTAKE_4,
+        INDEX_4,
+        DRIVE_TO_INTAKE_5,
+        INDEX_5,
+        DRIVE_TO_INTAKE_6,
+        INDEX_6,
+        DRIVE_TO_GOAL_2,
+        SHOOT_PRELOADED_3,
         INTAKE_1,
         STRAFE_OUT
     }
@@ -60,14 +71,23 @@ public class LaunchTest9Ball extends OpMode {
 
     private final Pose startPose = new Pose(20, 120, Math.toRadians(135));
     private final Pose shootPose = new Pose(50, 96, Math.toRadians(135));
+
     private final Pose intakeStart = new Pose(48, 83, Math.toRadians(180));
     private final Pose intakePosition1 = new Pose(37, 83, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(30.5, 83, Math.toRadians(180));
     private final Pose intakePosition3 = new Pose(20, 83, Math.toRadians(180));
-    private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
-    private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 
-    private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
+    private final Pose intakePosition4 = new Pose(37, 59, Math.toRadians(180));
+    private final Pose intakePosition5 = new Pose(30.5, 59, Math.toRadians(180));
+    private final Pose intakePosition6 = new Pose(20, 59, Math.toRadians(180));
+
+    private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
+
+    private final Pose intake4startPose = new Pose(48, 59, Math.toRadians(180));
+
+    private final Pose endPose = new Pose(55, 108, Math.toRadians(135));
+
+    private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos, shootToIntake4, startToIntake4, intake4toIntake5, intake5toIntake6, intake6toShootPos;
 
     public void buildPaths() {
         startToShoot = follower.pathBuilder()
@@ -94,6 +114,26 @@ public class LaunchTest9Ball extends OpMode {
                 .addPath(new BezierLine(shootPose, intake1startPose))
                 .setLinearHeadingInterpolation(shootPose.getHeading(), intake1startPose.getHeading())
                 .build();
+        shootToIntake4 = follower.pathBuilder()
+                .addPath(new BezierLine(shootPose, intake4startPose))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), intake4startPose.getHeading())
+                .build();
+        startToIntake4 = follower.pathBuilder()
+                .addPath(new BezierLine(intake4startPose, intakePosition4))
+                .setLinearHeadingInterpolation(intake4startPose.getHeading(), intakePosition4.getHeading())
+                .build();
+        intake4toIntake5 = follower.pathBuilder()
+                .addPath(new BezierLine(intakePosition4, intakePosition5))
+                .setLinearHeadingInterpolation(intakePosition4.getHeading(), intakePosition5.getHeading())
+                .build();
+        intake5toIntake6 = follower.pathBuilder()
+                .addPath(new BezierLine(intakePosition5, intakePosition6))
+                .setLinearHeadingInterpolation(intakePosition5.getHeading(), intakePosition6.getHeading())
+                .build();
+        intake6toShootPos = follower.pathBuilder()
+                .addPath(new BezierLine(intakePosition6, shootPose))
+                .setLinearHeadingInterpolation(intakePosition6.getHeading(), shootPose.getHeading())
+                .build();
         shootToEnd = follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, endPose))
                 .setLinearHeadingInterpolation(shootPose.getHeading(), endPose.getHeading())
@@ -110,7 +150,7 @@ public class LaunchTest9Ball extends OpMode {
                 if (!follower.isBusy()) {
                     //requested shots??
                     if (!shotsTriggered) {
-                        shooter.fireShots(3,5);
+                        shooter.fireShots(3,9);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
                         setPathState(PathState.DRIVE_TO_INTAKE);
@@ -176,7 +216,7 @@ public class LaunchTest9Ball extends OpMode {
                 }
                 break;
             case DRIVE_TO_GOAL_1:
-                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.3) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.5) {
                     intakeMotor.setPower(0);
                     shotsTriggered = false;
 //                    spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -190,6 +230,91 @@ public class LaunchTest9Ball extends OpMode {
                 }
                 break;
             case SHOOT_PRELOADED_2:
+                if (!follower.isBusy()) {
+                    //requested shots??
+                    if (!shotsTriggered) {
+                        shooter.fireShots(3, 5);
+                        shotsTriggered = true;
+                    } else if (!shooter.isBusy()) {
+                        follower.followPath(shootToEnd, true);
+                        index = 4;
+                        setPathState(PathState.DRIVE_TO_OTHER_INTAKE);
+                    }
+                }
+                break;
+            case DRIVE_TO_OTHER_INTAKE:
+                if (!follower.isBusy()) {
+                    follower.followPath(shootToIntake4);
+//                    spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                    spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    setPathState(PathState.INTAKE_ON_2);
+                }
+                break;
+            case INTAKE_ON_2:
+                if (!follower.isBusy()) {
+                    intakeMotor.setPower(1);
+                    setPathState(PathState.DRIVE_TO_INTAKE_4);
+                }
+                break;
+            case DRIVE_TO_INTAKE_4:
+                if (!follower.isBusy()) {
+                    follower.followPath(startToIntake4);
+                    setPathState(PathState.INDEX_4);
+                }
+                break;
+            case INDEX_4:
+                if (!follower.isBusy()) {
+                    spinUseLeft();
+                    pathTimer.resetTimer();
+                    setPathState(PathState.DRIVE_TO_INTAKE_5);
+                }
+                break;
+            case DRIVE_TO_INTAKE_5:
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
+                    follower.followPath(intake4toIntake5);
+                    setPathState(PathState.INDEX_5);
+                }
+                break;
+            case INDEX_5:
+                if (!follower.isBusy()) {
+                    spinUseLeft();
+                    pathTimer.resetTimer();
+//                    flickServo.setPosition(-1);
+//                    if (pathTimer.getElapsedTimeSeconds() > 0.15) {
+//                        flickServo.setPosition(0.5);
+//                        pathTimer.resetTimer();
+                    setPathState(PathState.DRIVE_TO_INTAKE_6);
+//                    }
+                }
+                break;
+            case DRIVE_TO_INTAKE_6:
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
+                    follower.followPath(intake5toIntake6);
+                    setPathState(PathState.INDEX_6);
+                }
+                break;
+            case INDEX_6:
+                if (!follower.isBusy()) {
+                    spinUseLeft();
+                    pathTimer.resetTimer();
+                    setPathState(PathState.DRIVE_TO_GOAL_2);
+                }
+                break;
+            case DRIVE_TO_GOAL_2:
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.5) {
+                    intakeMotor.setPower(0);
+                    shotsTriggered = false;
+//                    spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+//                    spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                    follower.followPath(intake6toShootPos);
+                    setPathState(PathState.SHOOT_PRELOADED_3);
+//                    if (!follower.isBusy()) {
+//                        follower.followPath(shootToEnd, true);
+//                        setPathState(PathState.STRAFE_OUT);
+//                    }
+                }
+                break;
+            case SHOOT_PRELOADED_3:
                 if (!follower.isBusy()) {
                     //requested shots??
                     if (!shotsTriggered) {
@@ -261,7 +386,7 @@ public class LaunchTest9Ball extends OpMode {
     }
     void spinUseLeft() {
         index -= 1;
-        spindexer.setTargetPosition(BASE_INDEXER_POS * (5 - index));
+        spindexer.setTargetPosition(BASE_INDEXER_POS * (9 - index));
         spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexer.setPower(0.3);
     }

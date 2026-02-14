@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class ShooterLogicQuickdraw {
+public class ShooterLogicQuickdraw9Ball {
     private DcMotorEx spindexer;
     private DcMotorEx shootMotor;
     private DcMotorEx shootMotor2;
@@ -39,7 +39,7 @@ public class ShooterLogicQuickdraw {
     private double LOAD_UNLOAD_TIME = 0.3;
 
     public int shotsRemaining = 0;
-    private int index = 5;
+    private int index = 9;
 
     private double TARGET_FLYWHEEL_POWER = 0.5;
 
@@ -161,7 +161,7 @@ public class ShooterLogicQuickdraw {
 
     void spinUseLeft() {
         index -= 1;
-        spindexer.setTargetPosition(BASE_INDEXER_POS * (5 - index));
+        spindexer.setTargetPosition(BASE_INDEXER_POS * (9 - index));
         spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexer.setPower(0.3);
     }
