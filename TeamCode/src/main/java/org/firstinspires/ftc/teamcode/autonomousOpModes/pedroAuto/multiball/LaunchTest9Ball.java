@@ -70,20 +70,23 @@ public class LaunchTest9Ball extends OpMode {
     private PathState pathState;
 
     private final Pose startPose = new Pose(20, 120, Math.toRadians(135));
+
     private final Pose shootPose = new Pose(50, 96, Math.toRadians(135));
+    private final Pose shootPose2 = new Pose(48, 96, Math.toRadians(135));
+    private final Pose shootPose3 = new Pose(48, 96, Math.toRadians(135));
 
     private final Pose intakeStart = new Pose(48, 83, Math.toRadians(180));
     private final Pose intakePosition1 = new Pose(37, 83, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(30.5, 83, Math.toRadians(180));
     private final Pose intakePosition3 = new Pose(20, 83, Math.toRadians(180));
 
-    private final Pose intakePosition4 = new Pose(37, 59, Math.toRadians(180));
-    private final Pose intakePosition5 = new Pose(30.5, 59, Math.toRadians(180));
-    private final Pose intakePosition6 = new Pose(20, 59, Math.toRadians(180));
+    private final Pose intakePosition4 = new Pose(37, 58, Math.toRadians(180));
+    private final Pose intakePosition5 = new Pose(30.5, 58, Math.toRadians(180));
+    private final Pose intakePosition6 = new Pose(20, 58, Math.toRadians(180));
 
     private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
 
-    private final Pose intake4startPose = new Pose(48, 59, Math.toRadians(180));
+    private final Pose intake4startPose = new Pose(48, 58, Math.toRadians(180));
 
     private final Pose endPose = new Pose(55, 108, Math.toRadians(135));
 
@@ -107,8 +110,8 @@ public class LaunchTest9Ball extends OpMode {
                 .setLinearHeadingInterpolation(intakePosition2.getHeading(), intakePosition3.getHeading())
                 .build();
         intake3toShootPos = follower.pathBuilder()
-                .addPath(new BezierLine(intakePosition3, shootPose))
-                .setLinearHeadingInterpolation(intakePosition3.getHeading(), shootPose.getHeading())
+                .addPath(new BezierLine(intakePosition3, shootPose2))
+                .setLinearHeadingInterpolation(intakePosition3.getHeading(), shootPose2.getHeading())
                 .build();
         shootToIntake1 = follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, intake1startPose))
@@ -131,8 +134,8 @@ public class LaunchTest9Ball extends OpMode {
                 .setLinearHeadingInterpolation(intakePosition5.getHeading(), intakePosition6.getHeading())
                 .build();
         intake6toShootPos = follower.pathBuilder()
-                .addPath(new BezierLine(intakePosition6, shootPose))
-                .setLinearHeadingInterpolation(intakePosition6.getHeading(), shootPose.getHeading())
+                .addPath(new BezierLine(intakePosition6, shootPose3))
+                .setLinearHeadingInterpolation(intakePosition6.getHeading(), shootPose3.getHeading())
                 .build();
         shootToEnd = follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, endPose))
@@ -236,7 +239,6 @@ public class LaunchTest9Ball extends OpMode {
                         shooter.fireShots(3, 5);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
-                        follower.followPath(shootToEnd, true);
                         index = 4;
                         setPathState(PathState.DRIVE_TO_OTHER_INTAKE);
                     }
