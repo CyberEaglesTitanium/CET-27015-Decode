@@ -35,16 +35,15 @@ public class ShooterLogicQuickdraw {
     private int BASE_INDEXER_POS = 178;
 
     private double FLICK_HAMMER_TIME = 0.3;
-    private double FLICK_START_TIME = 0.3;
     private double LOAD_LOAD_TIME = 0.3;
     private double LOAD_UNLOAD_TIME = 0.3;
 
     public int shotsRemaining = 0;
-    private int index = 3;
+    private int index = 5;
 
     private double TARGET_FLYWHEEL_POWER = 0.5;
 
-    private double MAX_FLYWHEEL_TIME = 2.5;
+    private double MAX_FLYWHEEL_TIME = 2;
 
     public void init (HardwareMap hwMap) {
         spindexer = hwMap.get(DcMotorEx.class, "spindexifier");
@@ -53,8 +52,6 @@ public class ShooterLogicQuickdraw {
         shootMotor = hwMap.get(DcMotorEx.class, "shootMotor");
         shootMotor2 = hwMap.get(DcMotorEx.class, "shootMotor2");
 
-        spindexer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        spindexer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         shootMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         shootMotor2.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 //        shootMotor2.setDirection(DcMotorEx.Direction.REVERSE);
@@ -112,6 +109,7 @@ public class ShooterLogicQuickdraw {
                     stateTimer.reset();
                     flywheelState = FlywheelState.LAUNCH;
                 }
+                break;
             case LAUNCH:
                 if (stateTimer.seconds() > LOAD_LOAD_TIME) {
                     flickServo.setPosition(FLICK_STARTER_POS);
@@ -133,7 +131,7 @@ public class ShooterLogicQuickdraw {
                     } else {
                         shootMotor.setPower(0);
                         shootMotor2.setPower(0);
-                        index = 3;
+//                        index = 9;
                         flywheelState = FlywheelState.IDLE;
                     }
                 }
@@ -152,9 +150,18 @@ public class ShooterLogicQuickdraw {
         return flywheelState != FlywheelState.IDLE;
     }
 
+    // it might be that ai is useful. i still don't like it though.
+    public void spindexStep() {
+        int currentPosOfIndexer = spindexer.getCurrentPosition();
+        int nextPos = BASE_INDEXER_POS + currentPosOfIndexer;
+        spindexer.setTargetPosition(nextPos);
+        spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        spindexer.setPower(0.3);
+    }
+
     void spinUseLeft() {
         index -= 1;
-        spindexer.setTargetPosition(BASE_INDEXER_POS * (3 - index));
+        spindexer.setTargetPosition(BASE_INDEXER_POS * (5 - index));
         spindexer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         spindexer.setPower(0.3);
     }

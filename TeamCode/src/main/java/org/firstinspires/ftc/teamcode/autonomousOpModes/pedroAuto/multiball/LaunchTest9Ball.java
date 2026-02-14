@@ -12,13 +12,11 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.ThreeBlue;
-import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogic;
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.ShooterLogicQuickdraw;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "6-Ball Test (Blue)", group = "Autonomous")
-public class LaunchTest extends OpMode {
+@Autonomous(name = "9-Ball Test (Blue)", group = "Autonomous")
+public class LaunchTest9Ball extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
