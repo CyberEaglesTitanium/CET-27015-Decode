@@ -465,11 +465,15 @@ import java.util.TimerTask;
                     shooterIsOn = !shooterIsOn;
 
                 }
-//                if (gamepad1.xWasPressed()) {
-//                    moveOnAprilTag(20);
-//                    sleep(500);
-//                    shootSequence();
-//                }
+                if (gamepad1.xWasPressed()) {
+                    currentShootPower = 0.4;
+                }
+                if (gamepad1.aWasPressed()) {
+                    currentShootPower = 0.5;
+                }
+                if (gamepad1.bWasPressed()) {
+                    currentShootPower = 0.6;
+                }
 
                 if (shooterIsOn) {
                     shootMotor.setPower(currentShootPower);

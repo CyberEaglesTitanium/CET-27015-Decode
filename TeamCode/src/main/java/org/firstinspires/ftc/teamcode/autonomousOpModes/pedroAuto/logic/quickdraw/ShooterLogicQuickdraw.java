@@ -21,6 +21,7 @@ public class ShooterLogicQuickdraw {
         SPIN_UP,
         LOAD,
         HAMMER,
+        LIFT_HAMMER,
         LAUNCH,
         RESET
     }
@@ -107,12 +108,18 @@ public class ShooterLogicQuickdraw {
                 if (stateTimer.seconds() > FLICK_HAMMER_TIME) {
                     flickServo.setPosition(FLICK_HAMMER_POS);
                     stateTimer.reset();
+                    flywheelState = FlywheelState.LIFT_HAMMER;
+                }
+                break;
+            case LIFT_HAMMER:
+                if (stateTimer.seconds() > 0.15) {
+                    flickServo.setPosition(FLICK_STARTER_POS);
+                    stateTimer.reset();
                     flywheelState = FlywheelState.LAUNCH;
                 }
                 break;
             case LAUNCH:
                 if (stateTimer.seconds() > LOAD_LOAD_TIME) {
-                    flickServo.setPosition(FLICK_STARTER_POS);
                     if (shotsRemaining == 2) {
                         spinUseLeft();
                         stateTimer.reset();

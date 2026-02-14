@@ -63,7 +63,7 @@ public class LaunchTest extends OpMode {
     private final Pose intakeStart = new Pose(48, 83, Math.toRadians(180));
     private final Pose intakePosition1 = new Pose(37, 83, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(30.5, 83, Math.toRadians(180));
-    private final Pose intakePosition3 = new Pose(20, 83, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(18, 83, Math.toRadians(180));
     private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
     private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
 

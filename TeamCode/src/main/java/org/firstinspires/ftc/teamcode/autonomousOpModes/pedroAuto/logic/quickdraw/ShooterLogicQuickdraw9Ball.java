@@ -20,6 +20,7 @@ public class ShooterLogicQuickdraw9Ball {
         IDLE,
         SPIN_UP,
         LOAD,
+        LIFT_HAMMER,
         HAMMER,
         LAUNCH,
         RESET
@@ -34,8 +35,8 @@ public class ShooterLogicQuickdraw9Ball {
 
     private int BASE_INDEXER_POS = 178;
 
-    private double FLICK_HAMMER_TIME = 0.3;
-    private double LOAD_LOAD_TIME = 0.3;
+    private double FLICK_HAMMER_TIME = 0.25;
+    private double LOAD_LOAD_TIME = 0.25;
     private double LOAD_UNLOAD_TIME = 0.3;
 
     public int shotsRemaining = 0;
@@ -107,19 +108,25 @@ public class ShooterLogicQuickdraw9Ball {
                 if (stateTimer.seconds() > FLICK_HAMMER_TIME) {
                     flickServo.setPosition(FLICK_HAMMER_POS);
                     stateTimer.reset();
+                    flywheelState = FlywheelState.LIFT_HAMMER;
+                }
+                break;
+            case LIFT_HAMMER:
+                if (stateTimer.seconds() > 0.15) {
+                    flickServo.setPosition(FLICK_STARTER_POS);
+                    stateTimer.reset();
                     flywheelState = FlywheelState.LAUNCH;
                 }
                 break;
             case LAUNCH:
                 if (stateTimer.seconds() > LOAD_LOAD_TIME) {
-                    flickServo.setPosition(FLICK_STARTER_POS);
-                    if (shotsRemaining == 2) {
-                        spinUseLeft();
-                        stateTimer.reset();
-                    } else {
-                        stateTimer.reset();
-                    }
-                    flywheelState = FlywheelState.RESET;
+                        if (shotsRemaining == 2) {
+                            spinUseLeft();
+                            stateTimer.reset();
+                        } else {
+                            stateTimer.reset();
+                        }
+                        flywheelState = FlywheelState.RESET;
                 }
                 break;
             case RESET:

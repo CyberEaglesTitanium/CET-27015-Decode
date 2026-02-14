@@ -78,17 +78,17 @@ public class LaunchTest9Ball extends OpMode {
     private final Pose intakeStart = new Pose(48, 83, Math.toRadians(180));
     private final Pose intakePosition1 = new Pose(37, 83, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(30.5, 83, Math.toRadians(180));
-    private final Pose intakePosition3 = new Pose(20, 83, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(18, 83, Math.toRadians(180));
 
     private final Pose intakePosition4 = new Pose(37, 58, Math.toRadians(180));
     private final Pose intakePosition5 = new Pose(30.5, 58, Math.toRadians(180));
-    private final Pose intakePosition6 = new Pose(20, 58, Math.toRadians(180));
+    private final Pose intakePosition6 = new Pose(18, 58, Math.toRadians(180));
 
     private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
 
     private final Pose intake4startPose = new Pose(48, 58, Math.toRadians(180));
 
-    private final Pose endPose = new Pose(55, 108, Math.toRadians(135));
+    private final Pose endPose = new Pose(55, 108, Math.toRadians(155));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos, shootToIntake4, startToIntake4, intake4toIntake5, intake5toIntake6, intake6toShootPos;
 
@@ -134,8 +134,8 @@ public class LaunchTest9Ball extends OpMode {
                 .setLinearHeadingInterpolation(intakePosition5.getHeading(), intakePosition6.getHeading())
                 .build();
         intake6toShootPos = follower.pathBuilder()
-                .addPath(new BezierLine(intakePosition6, shootPose3))
-                .setLinearHeadingInterpolation(intakePosition6.getHeading(), shootPose3.getHeading())
+                .addPath(new BezierLine(intakePosition6, endPose))
+                .setLinearHeadingInterpolation(intakePosition6.getHeading(), endPose.getHeading())
                 .build();
         shootToEnd = follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, endPose))
@@ -208,11 +208,12 @@ public class LaunchTest9Ball extends OpMode {
             case DRIVE_TO_INTAKE_3:
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(intake2toIntake3);
+                    pathTimer.resetTimer();
                     setPathState(PathState.INDEX_3);
                 }
                 break;
             case INDEX_3:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.3) {
                     spinUseLeft();
                     pathTimer.resetTimer();
                     setPathState(PathState.DRIVE_TO_GOAL_1);
@@ -292,11 +293,12 @@ public class LaunchTest9Ball extends OpMode {
             case DRIVE_TO_INTAKE_6:
                 if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(intake5toIntake6);
+                    pathTimer.resetTimer();
                     setPathState(PathState.INDEX_6);
                 }
                 break;
             case INDEX_6:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.3) {
                     spinUseLeft();
                     pathTimer.resetTimer();
                     setPathState(PathState.DRIVE_TO_GOAL_2);
@@ -323,7 +325,7 @@ public class LaunchTest9Ball extends OpMode {
                         shooter.fireShots(3, 1);
                         shotsTriggered = true;
                     } else if (!shooter.isBusy()) {
-                        follower.followPath(shootToEnd, true);
+//                        follower.followPath(shootToEnd, true);
                         setPathState(PathState.STRAFE_OUT);
                     }
                 }
@@ -331,7 +333,7 @@ public class LaunchTest9Ball extends OpMode {
             case STRAFE_OUT:
                 if (!follower.isBusy()) {
                     if (stateMachinePleaseShush) {
-                        follower.followPath(shootToEnd, true);
+//                        follower.followPath(shootToEnd, true);
                         telemetry.addLine("Done all paths");
                         stateMachinePleaseShush = false;
                     }
