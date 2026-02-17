@@ -482,6 +482,9 @@ import java.util.TimerTask;
                 if (gamepad1.bWasPressed()) {
                     currentShootPower = 0.6;
                 }
+                if (gamepad1.right_trigger > 0.5) {
+                    currentShootPower = 0.65;
+                }
 
                 if (shooterIsOn) {
                     shootMotor.setPower(currentShootPower);
