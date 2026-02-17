@@ -35,8 +35,8 @@ public class ShooterLogicQuickdraw {
 
     private int BASE_INDEXER_POS = 178;
 
-    private double FLICK_HAMMER_TIME = 0.3;
-    private double LOAD_LOAD_TIME = 0.3;
+    private double FLICK_HAMMER_TIME = 0.25;
+    private double LOAD_LOAD_TIME = 0.25;
     private double LOAD_UNLOAD_TIME = 0.3;
 
     public int shotsRemaining = 0;

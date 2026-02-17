@@ -452,10 +452,18 @@ import java.util.TimerTask;
 //                if (gamepad1.bWasPressed()) {
 //                    moveOnAprilTag(20);
 //                }
-                if (gamepad2.yWasPressed()) {
+//                if (gamepad2.yWasPressed()) {
 //                    shooterIsOn = !shooterIsOn;
-                    aimNShoot();
-                }
+//                }
+//                if (gamepad2.xWasPressed()) {
+//                    currentShootPower = 0.4;
+//                }
+//                if (gamepad2.aWasPressed()) {
+//                    currentShootPower = 0.5;
+//                }
+//                if (gamepad2.bWasPressed()) {
+//                    currentShootPower = 0.6;
+//                }
 //                if (gamepad2.xWasPressed()) {
 //                    moveOnAprilTag(20);
 //                    sleep(500);
@@ -515,6 +523,16 @@ import java.util.TimerTask;
                     }
                 }
                 if (gamepad2.dpadDownWasPressed()) {
+                    if (currentShootPower > 0) {
+                        currentShootPower -= 0.1;
+                    }
+                }
+                if (gamepad1.dpadUpWasPressed()) {
+                    if (currentShootPower < 1) {
+                        currentShootPower += 0.1;
+                    }
+                }
+                if (gamepad1.dpadDownWasPressed()) {
                     if (currentShootPower > 0) {
                         currentShootPower -= 0.1;
                     }
