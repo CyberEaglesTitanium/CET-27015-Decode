@@ -484,6 +484,7 @@ import java.util.TimerTask;
                 }
                 if (gamepad1.right_trigger > 0.5) {
                     currentShootPower = 0.65;
+                    telemetry.addData("right trigger pressed",currentShootPower);
                 }
 
                 if (shooterIsOn) {
@@ -520,16 +521,16 @@ import java.util.TimerTask;
 //                } else {
 //                    spindexifier.setPower(0);
 //                }
-                if (gamepad2.dpadUpWasPressed()) {
-                    if (currentShootPower < 1) {
-                        currentShootPower += 0.1;
-                    }
-                }
-                if (gamepad2.dpadDownWasPressed()) {
-                    if (currentShootPower > 0) {
-                        currentShootPower -= 0.1;
-                    }
-                }
+//                if (gamepad2.dpadUpWasPressed()) {
+//                    if (currentShootPower < 1) {
+//                        currentShootPower += 0.1;
+//                    }
+//                }
+//               if (gamepad2.dpadDownWasPressed()) {
+//                    if (currentShootPower > 0) {
+//                        currentShootPower -= 0.1;
+//                    }
+//                }
                 if (gamepad1.dpadUpWasPressed()) {
                     if (currentShootPower < 1) {
                         currentShootPower += 0.1;
