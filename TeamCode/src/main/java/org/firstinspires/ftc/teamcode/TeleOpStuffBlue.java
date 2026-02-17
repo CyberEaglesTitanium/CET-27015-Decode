@@ -484,8 +484,19 @@ import java.util.TimerTask;
                 }
                 if (gamepad1.right_trigger > 0.5) {
                     currentShootPower = 0.65;
-                    telemetry.addData("right trigger pressed",currentShootPower);
                 }
+                if (gamepad1.left_trigger > 0.5) {
+                    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                } else {
+                    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                }
+
 
                 if (shooterIsOn) {
                     shootMotor.setPower(currentShootPower);
