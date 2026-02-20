@@ -59,14 +59,14 @@ public class LaunchTestRedLongshot extends OpMode {
 
     private PathState pathState;
 
-    private final Pose startPose = new Pose(124, 120, Math.toRadians(45));
-    private final Pose shootPose = new Pose(94, 96, Math.toRadians(45));
-    private final Pose intakeStart = new Pose(96, 83, Math.toRadians(0));
-    private final Pose intakePosition1 = new Pose(107, 83, Math.toRadians(0));
-    private final Pose intakePosition2 = new Pose(113.5, 83, Math.toRadians(0));
-    private final Pose intakePosition3 = new Pose(126, 83, Math.toRadians(0));
-    private final Pose intake1startPose = new Pose(96, 83, Math.toRadians(0));
-    private final Pose endPose = new Pose(104, 88, Math.toRadians(45));
+    private final Pose startPose = new Pose(90, 9, Math.toRadians(90));
+    private final Pose shootPose = new Pose(90, 15, Math.toRadians(70));
+    private final Pose intakeStart = new Pose(104, 36, Math.toRadians(0));
+    private final Pose intakePosition1 = new Pose(108, 36, Math.toRadians(0));
+    private final Pose intakePosition2 = new Pose(113, 36, Math.toRadians(0));
+    private final Pose intakePosition3 = new Pose(118, 36, Math.toRadians(0));
+    private final Pose intake1startPose = new Pose(104, 36, Math.toRadians(0));
+    private final Pose endPose = new Pose(110, 10, Math.toRadians(90));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 
