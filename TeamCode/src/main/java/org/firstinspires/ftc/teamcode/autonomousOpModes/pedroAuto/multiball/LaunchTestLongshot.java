@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdra
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdrawLongshot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "6-Ball Test (Blue)", group = "Autonomous")
+@Autonomous(name = "6-Ball Test (Blue, Long)", group = "Autonomous")
 public class LaunchTestLongshot extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;

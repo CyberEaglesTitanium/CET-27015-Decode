@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdraw;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
-@Autonomous(name = "6-Ball Test (Blue)", group = "Autonomous")
+@Autonomous(name = "6-Ball Test (Red)", group = "Autonomous")
 public class LaunchTestRed extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
