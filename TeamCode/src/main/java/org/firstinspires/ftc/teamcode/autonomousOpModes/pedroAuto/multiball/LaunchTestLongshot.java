@@ -13,10 +13,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdraw;
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdrawLongshot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "6-Ball Test (Blue)", group = "Autonomous")
-public class LaunchTestRed extends OpMode {
+public class LaunchTestLongshot extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -33,7 +34,7 @@ public class LaunchTestRed extends OpMode {
 
     private ElapsedTime stateTimer = new ElapsedTime();
 
-    private ShooterLogicQuickdraw shooter = new ShooterLogicQuickdraw();
+    private ShooterLogicQuickdrawLongshot shooter = new ShooterLogicQuickdrawLongshot();
 
     private boolean artifactsToEat = false;
     private boolean shotsTriggered = false;
@@ -58,14 +59,14 @@ public class LaunchTestRed extends OpMode {
 
     private PathState pathState;
 
-    private final Pose startPose = new Pose(124, 120, Math.toRadians(45));
-    private final Pose shootPose = new Pose(94, 96, Math.toRadians(45));
-    private final Pose intakeStart = new Pose(96, 83, Math.toRadians(0));
-    private final Pose intakePosition1 = new Pose(107, 83, Math.toRadians(0));
-    private final Pose intakePosition2 = new Pose(113.5, 83, Math.toRadians(0));
-    private final Pose intakePosition3 = new Pose(126, 83, Math.toRadians(0));
-    private final Pose intake1startPose = new Pose(96, 83, Math.toRadians(0));
-    private final Pose endPose = new Pose(104, 88, Math.toRadians(45));
+    private final Pose startPose = new Pose(58, 9, Math.toRadians(90));
+    private final Pose shootPose = new Pose(58, 15, Math.toRadians(110));
+    private final Pose intakeStart = new Pose(40, 36, Math.toRadians(180));
+    private final Pose intakePosition1 = new Pose(36, 36, Math.toRadians(180));
+    private final Pose intakePosition2 = new Pose(31, 36, Math.toRadians(180));
+    private final Pose intakePosition3 = new Pose(26, 36, Math.toRadians(180));
+    private final Pose intake1startPose = new Pose(36, 36, Math.toRadians(180));
+    private final Pose endPose = new Pose(38, 10, Math.toRadians(90));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 

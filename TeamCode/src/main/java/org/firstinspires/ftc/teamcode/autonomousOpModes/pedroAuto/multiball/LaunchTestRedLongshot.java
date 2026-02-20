@@ -13,10 +13,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdraw;
+import org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw.ShooterLogicQuickdrawLongshot;
 import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
 
 @Autonomous(name = "6-Ball Test (Blue)", group = "Autonomous")
-public class LaunchTestRed extends OpMode {
+public class LaunchTestRedLongshot extends OpMode {
     private Follower follower;
     private Timer pathTimer, opModeTimer;
 
@@ -33,7 +34,7 @@ public class LaunchTestRed extends OpMode {
 
     private ElapsedTime stateTimer = new ElapsedTime();
 
-    private ShooterLogicQuickdraw shooter = new ShooterLogicQuickdraw();
+    private ShooterLogicQuickdrawLongshot shooter = new ShooterLogicQuickdrawLongshot();
 
     private boolean artifactsToEat = false;
     private boolean shotsTriggered = false;
