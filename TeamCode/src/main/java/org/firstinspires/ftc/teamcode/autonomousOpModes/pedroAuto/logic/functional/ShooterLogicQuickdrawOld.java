@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.quickdraw;
+package org.firstinspires.ftc.teamcode.autonomousOpModes.pedroAuto.logic.functional;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class ShooterLogicQuickdraw {
+public class ShooterLogicQuickdrawOld {
     private DcMotorEx spindexer;
     private DcMotorEx shootMotor;
     private DcMotorEx shootMotor2;
@@ -21,7 +21,6 @@ public class ShooterLogicQuickdraw {
         SPIN_UP,
         LOAD,
         HAMMER,
-        LIFT_HAMMER,
         LAUNCH,
         RESET
     }
@@ -108,18 +107,12 @@ public class ShooterLogicQuickdraw {
                 if (stateTimer.seconds() > FLICK_HAMMER_TIME) {
                     flickServo.setPosition(FLICK_HAMMER_POS);
                     stateTimer.reset();
-                    flywheelState = FlywheelState.LIFT_HAMMER;
-                }
-                break;
-            case LIFT_HAMMER:
-                if (stateTimer.seconds() > 0.15) {
-                    flickServo.setPosition(FLICK_STARTER_POS);
-                    stateTimer.reset();
                     flywheelState = FlywheelState.LAUNCH;
                 }
                 break;
             case LAUNCH:
                 if (stateTimer.seconds() > LOAD_LOAD_TIME) {
+                    flickServo.setPosition(FLICK_STARTER_POS);
                     if (shotsRemaining == 2) {
                         spinUseLeft();
                         stateTimer.reset();
