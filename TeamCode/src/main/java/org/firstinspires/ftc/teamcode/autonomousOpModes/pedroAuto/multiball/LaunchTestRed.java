@@ -60,10 +60,10 @@ public class LaunchTestRed extends OpMode {
 
     private final Pose startPose = new Pose(125, 118, Math.toRadians(45));
     private final Pose initialShootPose = new Pose(94, 96, Math.toRadians(45));
-    private final Pose shootPose = new Pose(94, 96, Math.toRadians(45));
+    private final Pose shootPose = new Pose(92, 94, Math.toRadians(45));
     private final Pose intakeStart = new Pose(96, 80, Math.toRadians(0));
     private final Pose intakePosition1 = new Pose(107, 80, Math.toRadians(0));
-    private final Pose intakePosition2 = new Pose(113.5, 80, Math.toRadians(0));
+    private final Pose intakePosition2 = new Pose(113, 80, Math.toRadians(0));
     private final Pose intakePosition3 = new Pose(126, 80, Math.toRadians(0));
     private final Pose intake1startPose = new Pose(96, 80, Math.toRadians(0));
     private final Pose endPose = new Pose(106, 86, Math.toRadians(45));
