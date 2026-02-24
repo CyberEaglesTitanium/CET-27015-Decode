@@ -60,12 +60,12 @@ public class LaunchTestRed extends OpMode {
 
     private final Pose startPose = new Pose(124, 120, Math.toRadians(45));
     private final Pose shootPose = new Pose(94, 96, Math.toRadians(45));
-    private final Pose intakeStart = new Pose(96, 83, Math.toRadians(0));
-    private final Pose intakePosition1 = new Pose(107, 83, Math.toRadians(0));
-    private final Pose intakePosition2 = new Pose(113.5, 83, Math.toRadians(0));
-    private final Pose intakePosition3 = new Pose(126, 83, Math.toRadians(0));
-    private final Pose intake1startPose = new Pose(96, 83, Math.toRadians(0));
-    private final Pose endPose = new Pose(104, 88, Math.toRadians(45));
+    private final Pose intakeStart = new Pose(96, 80, Math.toRadians(0));
+    private final Pose intakePosition1 = new Pose(107, 80, Math.toRadians(0));
+    private final Pose intakePosition2 = new Pose(113.5, 80, Math.toRadians(0));
+    private final Pose intakePosition3 = new Pose(126, 80, Math.toRadians(0));
+    private final Pose intake1startPose = new Pose(96, 80, Math.toRadians(0));
+    private final Pose endPose = new Pose(106, 86, Math.toRadians(45));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 
@@ -134,18 +134,19 @@ public class LaunchTestRed extends OpMode {
             case DRIVE_TO_INTAKE_1:
                 if (!follower.isBusy()) {
                     follower.followPath(startToIntake1);
+                    pathTimer.resetTimer();
                     setPathState(PathState.INDEX_1);
                 }
                 break;
             case INDEX_1:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
                     spinUseLeft();
                     pathTimer.resetTimer();
                     setPathState(PathState.DRIVE_TO_INTAKE_2);
                 }
                 break;
             case DRIVE_TO_INTAKE_2:
-                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(intake1toIntake2);
                     setPathState(PathState.INDEX_2);
                 }

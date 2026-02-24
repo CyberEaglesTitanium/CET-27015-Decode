@@ -59,13 +59,12 @@ public class LaunchTestRedLongshot extends OpMode {
 
     private PathState pathState;
 
-    private final Pose startPose = new Pose(90, 9, Math.toRadians(90));
-    private final Pose shootPose = new Pose(90, 15, Math.toRadians(70));
-    private final Pose intakeStart = new Pose(104, 36, Math.toRadians(0));
-    private final Pose intakePosition1 = new Pose(108, 36, Math.toRadians(0));
-    private final Pose intakePosition2 = new Pose(113, 36, Math.toRadians(0));
-    private final Pose intakePosition3 = new Pose(118, 36, Math.toRadians(0));
-    private final Pose intake1startPose = new Pose(104, 36, Math.toRadians(0));
+    private final Pose startPose = new Pose(86, 9, Math.toRadians(90));
+    private final Pose shootPose = new Pose(86, 15, Math.toRadians(70));
+    private final Pose intakeStart = new Pose(86, 30, Math.toRadians(0));
+    private final Pose intakePosition1 = new Pose(105, 30, Math.toRadians(0));
+    private final Pose intakePosition2 = new Pose(113.5, 30, Math.toRadians(0));
+    private final Pose intakePosition3 = new Pose(126, 30, Math.toRadians(0));
     private final Pose endPose = new Pose(110, 10, Math.toRadians(90));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
@@ -92,8 +91,8 @@ public class LaunchTestRedLongshot extends OpMode {
                 .setLinearHeadingInterpolation(intakePosition3.getHeading(), shootPose.getHeading())
                 .build();
         shootToIntake1 = follower.pathBuilder()
-                .addPath(new BezierLine(shootPose, intake1startPose))
-                .setLinearHeadingInterpolation(shootPose.getHeading(), intake1startPose.getHeading())
+                .addPath(new BezierLine(shootPose, intakeStart))
+                .setLinearHeadingInterpolation(shootPose.getHeading(), intakeStart.getHeading())
                 .build();
         shootToEnd = follower.pathBuilder()
                 .addPath(new BezierLine(shootPose, endPose))
@@ -135,19 +134,21 @@ public class LaunchTestRedLongshot extends OpMode {
             case DRIVE_TO_INTAKE_1:
                 if (!follower.isBusy()) {
                     follower.followPath(startToIntake1);
+                    pathTimer.resetTimer();
                     setPathState(PathState.INDEX_1);
                 }
                 break;
             case INDEX_1:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
                     spinUseLeft();
                     pathTimer.resetTimer();
                     setPathState(PathState.DRIVE_TO_INTAKE_2);
                 }
                 break;
             case DRIVE_TO_INTAKE_2:
-                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(intake1toIntake2);
+                    pathTimer.resetTimer();
                     setPathState(PathState.INDEX_2);
                 }
                 break;

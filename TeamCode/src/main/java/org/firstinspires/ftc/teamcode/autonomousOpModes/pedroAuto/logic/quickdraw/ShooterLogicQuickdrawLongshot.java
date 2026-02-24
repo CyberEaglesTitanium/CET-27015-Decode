@@ -46,7 +46,7 @@ public class ShooterLogicQuickdrawLongshot {
 
     private double TARGET_FLYWHEEL_POWER = 0.75;
 
-    private double MAX_FLYWHEEL_TIME = 3;
+    private double MAX_FLYWHEEL_TIME = 4;
 
     public void init (HardwareMap hwMap) {
         spindexer = hwMap.get(DcMotorEx.class, "spindexifier");

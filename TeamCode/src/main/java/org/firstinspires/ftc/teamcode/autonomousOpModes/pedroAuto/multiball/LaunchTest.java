@@ -134,18 +134,19 @@ public class LaunchTest extends OpMode {
             case DRIVE_TO_INTAKE_1:
                 if (!follower.isBusy()) {
                     follower.followPath(startToIntake1);
+                    pathTimer.resetTimer();
                     setPathState(PathState.INDEX_1);
                 }
                 break;
             case INDEX_1:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
                     spinUseLeft();
                     pathTimer.resetTimer();
                     setPathState(PathState.DRIVE_TO_INTAKE_2);
                 }
                 break;
             case DRIVE_TO_INTAKE_2:
-                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 0.6) {
+                if (!follower.isBusy() && pathTimer.getElapsedTimeSeconds() > 1) {
                     follower.followPath(intake1toIntake2);
                     setPathState(PathState.INDEX_2);
                 }
