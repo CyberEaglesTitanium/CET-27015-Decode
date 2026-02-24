@@ -485,6 +485,18 @@ import java.util.TimerTask;
                 if (gamepad1.right_trigger > 0.5) {
                     currentShootPower = 0.65;
                 }
+                if (gamepad1.left_trigger > 0.5) {
+                    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                } else {
+                    frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                    backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                }
+
 
                 if (shooterIsOn) {
                     shootMotor.setPower(currentShootPower);
@@ -520,16 +532,16 @@ import java.util.TimerTask;
 //                } else {
 //                    spindexifier.setPower(0);
 //                }
-                if (gamepad2.dpadUpWasPressed()) {
-                    if (currentShootPower < 1) {
-                        currentShootPower += 0.1;
-                    }
-                }
-                if (gamepad2.dpadDownWasPressed()) {
-                    if (currentShootPower > 0) {
-                        currentShootPower -= 0.1;
-                    }
-                }
+//                if (gamepad2.dpadUpWasPressed()) {
+//                    if (currentShootPower < 1) {
+//                        currentShootPower += 0.1;
+//                    }
+//                }
+//               if (gamepad2.dpadDownWasPressed()) {
+//                    if (currentShootPower > 0) {
+//                        currentShootPower -= 0.1;
+//                    }
+//                }
                 if (gamepad1.dpadUpWasPressed()) {
                     if (currentShootPower < 1) {
                         currentShootPower += 0.1;
