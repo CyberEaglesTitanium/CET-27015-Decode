@@ -42,7 +42,7 @@ public class ShooterLogicQuickdraw {
     public int shotsRemaining = 0;
     private int index = 5;
 
-    private double TARGET_FLYWHEEL_POWER = 0.475;
+    private double TARGET_FLYWHEEL_POWER = 0.45;
 
     private double MAX_FLYWHEEL_TIME = 3;
 

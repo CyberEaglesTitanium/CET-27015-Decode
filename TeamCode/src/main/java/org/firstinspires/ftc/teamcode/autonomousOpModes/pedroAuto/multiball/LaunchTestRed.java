@@ -58,7 +58,8 @@ public class LaunchTestRed extends OpMode {
 
     private PathState pathState;
 
-    private final Pose startPose = new Pose(124, 120, Math.toRadians(45));
+    private final Pose startPose = new Pose(125, 118, Math.toRadians(45));
+    private final Pose initialShootPose = new Pose(94, 96, Math.toRadians(45));
     private final Pose shootPose = new Pose(94, 96, Math.toRadians(45));
     private final Pose intakeStart = new Pose(96, 80, Math.toRadians(0));
     private final Pose intakePosition1 = new Pose(107, 80, Math.toRadians(0));

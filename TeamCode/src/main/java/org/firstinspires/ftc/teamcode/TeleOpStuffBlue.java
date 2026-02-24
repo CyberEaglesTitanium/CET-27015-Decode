@@ -117,16 +117,21 @@ import java.util.TimerTask;
         }
 
     void justFlick() {
-        // Hammer position
-        shootGate1.setPosition(-1);
-        sleep(500);
-        // Starter position
-        shootGate1.setPosition(0.5);
+        elapsingTime.reset();
+        if (elapsingTime.seconds() > 0.5) {
+            shootGate1.setPosition(0.5);
+        } else {
+            shootGate1.setPosition(-1);
+        }
     }
     void justLoad() {
-        shootGate2.setPosition(0);
-        sleep(200);
-        shootGate2.setPosition(1);
+        elapsingTime.reset();
+        if (elapsingTime.seconds() > 0.2) {
+            shootGate2.setPosition(1);
+        } else {
+            shootGate2.setPosition(0);
+        }
+
     }
 
         void spinIndex() {

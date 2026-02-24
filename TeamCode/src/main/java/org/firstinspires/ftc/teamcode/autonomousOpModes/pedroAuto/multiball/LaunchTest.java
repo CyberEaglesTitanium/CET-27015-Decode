@@ -59,13 +59,13 @@ public class LaunchTest extends OpMode {
     private PathState pathState;
 
     private final Pose startPose = new Pose(20, 120, Math.toRadians(135));
-    private final Pose shootPose = new Pose(50, 96, Math.toRadians(135));
+    private final Pose shootPose = new Pose(54, 92, Math.toRadians(135));
     private final Pose intakeStart = new Pose(48, 83, Math.toRadians(180));
     private final Pose intakePosition1 = new Pose(37, 83, Math.toRadians(180));
     private final Pose intakePosition2 = new Pose(30.5, 83, Math.toRadians(180));
     private final Pose intakePosition3 = new Pose(18, 83, Math.toRadians(180));
     private final Pose intake1startPose = new Pose(48, 83, Math.toRadians(180));
-    private final Pose endPose = new Pose(40, 88, Math.toRadians(135));
+    private final Pose endPose = new Pose(45, 80, Math.toRadians(135));
 
     private PathChain startToShoot, shootToEnd, shootToIntake1, startToIntake1, intake1toIntake2, intake2toIntake3, intake3toShootPos;
 
