@@ -369,7 +369,10 @@ import java.util.TimerTask;
                 
                 if (intakeMotor.getPower() > 0){
                    gamepad1.rumble(0.5,0.5,1000);
-                   gamepad2.rumble(0.5,0.5,1000);
+                   gamepad2.rumble(0.25,0.25,1000);
+                } else if (intakeMotor.getPower() < 0){
+                    gamepad1.rumble(0.5,0.5,50);
+                    gamepad2.rumble(0.25,0.25,50);
                 }
 
                 // Speed control buttons
