@@ -365,6 +365,13 @@ import java.util.TimerTask;
                 leftBackPower = Range.clip(drive + turn - strafe, -1, 1);
                 rightBackPower = Range.clip(drive - turn + strafe, -1, 1);
 
+                // haptic feedback intake motor
+                
+                if (intakeMotor.getPower() > 0){
+                   gamepad1.rumble(0.5,0.5,1000);
+                   gamepad2.rumble(0.5,0.5,1000);
+                }
+
                 // Speed control buttons
                 if (gamepad1.left_bumper) {
                     leftFrontPower /= 2;
